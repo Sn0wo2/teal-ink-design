@@ -1,0 +1,830 @@
+{
+  "app": {
+    "title": "青墨 Teal Ink: Vue 3 主题与组件库",
+    "description": "基于 Vue 3 与 Naive UI 的组件库, 提供统一主题与明暗模式, 使用青绿主色和鼠尾草绿次色"
+  },
+  "showcase": {
+    "brand": "青墨",
+    "home": "青墨首页",
+    "skip": "跳到组件示例",
+    "navigation": "主导航",
+    "language": "切换语言",
+    "languageCode": "中",
+    "languages": {
+      "chinese": "中文",
+      "english": "English"
+    },
+    "design": "配色与样式",
+    "components": "组件示例",
+    "start": "开始使用",
+    "appearance": "外观模式",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统",
+    "heroTitle": "搭界面",
+    "heroAccent": "从组件开始",
+    "heroDescription": "基于 Naive UI, 内置统一主题与明暗模式",
+    "explore": "浏览组件",
+    "meet": "查看配色",
+    "previewTitle": "青墨工作区",
+    "previewPath": "概览",
+    "previewGreeting": "今天要做的事",
+    "paletteTitle": "中性色为主",
+    "paletteLead": "青绿用于强调",
+    "primaryRole": "青绿: 主要操作",
+    "secondaryRole": "鼠尾草绿: 状态与进度",
+    "primaryLabel": "主色",
+    "secondaryLabel": "次色",
+    "compositionLabel": "建议占比: 纸面 85%, 中性色 10%, 主色 3%, 次色 2%",
+    "compositionBase": "纸面",
+    "compositionStructure": "中性色",
+    "compositionPrimary": "主色",
+    "compositionSecondary": "次色",
+    "compositionHint": "参考占比",
+    "colors": {
+      "paper": "暖纸",
+      "ivory": "米白",
+      "sand": "暖沙",
+      "charcoal": "炭灰",
+      "ink": "墨黑",
+      "primary": "青绿",
+      "secondary": "鼠尾草绿"
+    },
+    "copyColor": "复制{color}色值 {hex}",
+    "paletteHint": "点击复制 HEX",
+    "note": "项目笔记",
+    "initialNote": "先整理页面内容, 再检查组件状态",
+    "saved": "已保存",
+    "unsaved": "有修改",
+    "notePlaceholder": "写一条笔记",
+    "previewOnly": "本地预览, 刷新重置",
+    "save": "保存笔记",
+    "emptyNote": "请先填写笔记",
+    "rhythm": "任务进度",
+    "taskSpace": "整理内容",
+    "taskFocus": "搭建页面",
+    "taskPolish": "检查细节",
+    "focus": "开关示例",
+    "startOverline": "开始使用",
+    "startTitle": "引入组件\n配置主题",
+    "startDescription": "在工作区构建组件库, 引入样式并配置 TiProvider",
+    "hello": "你好, 青墨",
+    "copyCommand": "复制构建命令",
+    "copyAgain": "再次复制构建命令",
+    "copied": "已复制",
+    "copy": "复制",
+    "copyError": "复制失败, 请手动选择内容复制",
+    "top": "回到顶部"
+  },
+  "workshop": {
+    "groups": {
+      "teal": "青墨组件",
+      "inputs": "输入与表单",
+      "display": "数据与展示",
+      "feedback": "反馈与主题",
+      "layout": "布局与排版"
+    },
+    "allCategories": "全部分类 / {count}",
+    "groupCount": "{label} / {count}",
+    "filteredCount": "显示 {filtered} / {total}",
+    "overline": "组件示例",
+    "heading": "选个组件试试",
+    "directory": "组件目录",
+    "directoryAndFilters": "组件目录与筛选",
+    "searchComponents": "搜索组件",
+    "nameOrCategory": "名称或分类",
+    "exampleCategory": "示例分类",
+    "quickSelect": "快速选择组件",
+    "availableComponents": "可用组件",
+    "noMatchingComponents": "没有匹配的组件",
+    "clearFilters": "清除筛选",
+    "previewAndApi": "组件预览与 API",
+    "resetExample": "重置示例",
+    "preview": "预览",
+    "isolatedPreview": "{name} 隔离预览",
+    "sourceTab": "示例源码",
+    "apiTab": "接口",
+    "apiExplanation": "仅展示运行时属性, 不含完整 TypeScript 类型",
+    "noRuntimeProps": "无运行时属性",
+    "importTab": "导入",
+    "name": "名称",
+    "category": "分类",
+    "type": "类型",
+    "defaultValue": "默认值",
+    "props": "属性",
+    "events": "事件",
+    "factoryDefault": "工厂函数",
+    "unknownType": "未知",
+    "onDemandImport": "按需引入",
+    "copyCode": "复制代码",
+    "providerExplanation": "用 TiProvider 包裹应用以启用主题",
+    "copied": "已复制到剪贴板",
+    "copyFailed": "复制失败, 请选中代码后手动复制"
+  },
+  "standalone": {
+    "missingExample": "未找到「{name}」的组件示例"
+  },
+  "examples": {
+    "TiButton": {
+      "done": "操作已完成",
+      "primary": "主要按钮",
+      "secondary": "次要按钮",
+      "outlined": "描边按钮",
+      "text": "文字按钮",
+      "round": "圆角",
+      "unavailable": "暂不可用",
+      "loading": "正在处理"
+    },
+    "TiCard": {
+      "title": "青墨组件",
+      "featured": "精选",
+      "content": "用统一主题配置组件的颜色与排版",
+      "more": "了解更多"
+    },
+    "TiInput": {
+      "initial": "记录这次主题调整",
+      "label": "主题笔记",
+      "hint": "试着修改输入内容"
+    },
+    "TiProvider": {
+      "title": "局部主题",
+      "content": "主题只作用于当前 Provider 内的组件, 不修改页面其他区域"
+    },
+    "TiTag": {
+      "brand": "青墨 Teal Ink"
+    },
+    "TiLogo": {
+      "brand": "青墨"
+    },
+    "TiThemeSwitch": {
+      "theme": "主题模式",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统",
+      "hint": "点击切换模式, 也可以按住后滑动选择"
+    },
+    "NBadge": {
+      "unread": "条未读消息"
+    },
+    "NCarousel": {
+      "paper": "暖纸",
+      "ink": "墨色",
+      "primary": "青绿"
+    },
+    "NCarouselItem": {
+      "first": "第一张幻灯片",
+      "another": "另一张幻灯片"
+    },
+    "NDataTable": {
+      "name": "名称",
+      "category": "类别",
+      "updated": "更新时间",
+      "media": "媒体",
+      "date": "日期",
+      "data": "数据",
+      "navigation": "导航",
+      "today": "今天",
+      "yesterday": "昨天",
+      "avatar": "头像",
+      "calendar": "日历",
+      "dataTable": "数据表格",
+      "tree": "树形控件"
+    },
+    "NDescriptions": {
+      "project": "项目",
+      "version": "版本",
+      "status": "状态",
+      "active": "活跃",
+      "theme": "主题",
+      "themeValue": "青墨"
+    },
+    "NDescriptionsItem": {
+      "workspace": "工作区",
+      "designSystem": "设计系统",
+      "theme": "主题",
+      "themeValue": "青墨"
+    },
+    "NEllipsis": {
+      "description": "这是一段较长的项目说明, 超过两行后会截断; 将鼠标悬停在文字上, 可以查看完整内容, 不必为长说明增加列表高度"
+    },
+    "NGradientText": {
+      "text": "渐变文字示例"
+    },
+    "NHighlight": {
+      "text": "搜索组件名称, 查看匹配的示例",
+      "component": "组件",
+      "match": "匹配"
+    },
+    "NImage": {
+      "alt": "插画风格的山景"
+    },
+    "NImageGroup": {
+      "landscape": "山景",
+      "portrait": "插画肖像"
+    },
+    "NInfiniteScroll": {
+      "activity": "动态 {number}"
+    },
+    "NLog": {
+      "started": "已启动本地预览",
+      "loaded": "已加载组件示例",
+      "rendered": "已渲染公开组件示例",
+      "ready": "示例已就绪"
+    },
+    "NMarquee": {
+      "motto": "暖纸 / 米白 / 暖沙 / 炭灰 / 墨黑 / 青绿 / 鼠尾草绿"
+    },
+    "NPerformantEllipsis": {
+      "description": "项目说明最多显示两行, 超出后会截断; 较长的内容不会继续撑高当前区域, 适合用于列表或卡片摘要"
+    },
+    "NStatistic": {
+      "label": "月下载量"
+    },
+    "NTable": {
+      "component": "组件",
+      "status": "状态",
+      "ready": "就绪",
+      "avatar": "头像",
+      "calendar": "日历"
+    },
+    "NTag": {
+      "published": "已发布"
+    },
+    "NTbody": {
+      "material": "材质",
+      "finish": "表面处理",
+      "teal": "青绿色",
+      "matte": "哑光",
+      "porcelain": "瓷器",
+      "glazed": "上釉"
+    },
+    "NTd": {
+      "component": "组件",
+      "status": "状态",
+      "ready": "就绪",
+      "avatar": "头像"
+    },
+    "NTh": {
+      "component": "组件",
+      "status": "状态",
+      "ready": "就绪",
+      "calendar": "日历"
+    },
+    "NThead": {
+      "component": "组件",
+      "category": "类别",
+      "date": "日期",
+      "calendar": "日历"
+    },
+    "NTimeline": {
+      "published": "已发布",
+      "reviewed": "已审核",
+      "release": "新版本已发布",
+      "changes": "更改已通过审核"
+    },
+    "NTimelineItem": {
+      "completed": "已完成",
+      "started": "已开始",
+      "today": "今天",
+      "yesterday": "昨天",
+      "ready": "展示页已就绪",
+      "workspace": "已创建工作区"
+    },
+    "NTr": {
+      "component": "组件",
+      "status": "状态",
+      "ready": "就绪",
+      "avatar": "头像",
+      "calendar": "日历"
+    },
+    "NCode": {
+      "code": "const greeting = \"你好, 青墨\"\nconsole.log(greeting)"
+    },
+    "NTree": {
+      "workspace": "工作区",
+      "components": "组件",
+      "display": "展示",
+      "dataEntry": "数据录入",
+      "tokens": "设计令牌"
+    },
+    "NVirtualList": {
+      "row": "虚拟列表项 {number}"
+    },
+    "NWatermark": {
+      "preview": "这段内容用于展示水印效果"
+    },
+    "NAlert": {
+      "title": "预览说明",
+      "content": "示例数据只在当前页面中使用, 刷新后会重置"
+    },
+    "NConfigProvider": {
+      "description": "配置沿用青墨的主题色与排版, 不启用 Naive UI 的全局重置样式",
+      "save": "保存更改",
+      "later": "稍后处理",
+      "synced": "主题已同步",
+      "palette": "当前配色使用暖纸背景, 青绿主色和鼠尾草绿次色"
+    },
+    "NDialog": {
+      "open": "打开确认对话框",
+      "title": "发布这篇笔记?",
+      "content": "确认按钮用于演示操作, 不会实际发布内容",
+      "publish": "发布",
+      "reconsider": "取消"
+    },
+    "NDrawer": {
+      "open": "查看详情",
+      "title": "开放时间",
+      "content": "开放时间为周三至周日 10:00-18:00; 周一与周二休息",
+      "close": "关闭"
+    },
+    "NDrawerContent": {
+      "open": "打开侧边详情",
+      "title": "本周上新",
+      "content": "本周新增了三篇笔记, 包括配色记录与组件使用说明",
+      "done": "完成"
+    },
+    "NDropdown": {
+      "edit": "编辑笔记",
+      "copy": "复制链接",
+      "archive": "移至归档",
+      "none": "尚未选择",
+      "recent": "最近操作: {action}",
+      "button": "笔记操作"
+    },
+    "NEmpty": {
+      "favorites": "收藏夹",
+      "book": "『组件设计笔记』",
+      "clear": "清空收藏",
+      "empty": "还没有收藏的笔记",
+      "browse": "查看示例笔记"
+    },
+    "NGlobalStyle": {
+      "title": "Naive UI 全局基础样式",
+      "description": "此预览挂载 NGlobalStyle, 可查看全局重置样式的效果",
+      "status": "全局样式已挂载"
+    },
+    "NImagePreview": {
+      "alt": "日光与群山的插画",
+      "preview": "预览图片"
+    },
+    "NModal": {
+      "open": "打开笔记",
+      "title": "组件使用笔记",
+      "content": "主要操作使用青绿, 任务进度使用鼠尾草绿",
+      "continue": "关闭笔记"
+    },
+    "NPopconfirm": {
+      "archived": "笔记已归档",
+      "prompt": "点击按钮, 试用确认弹层",
+      "archive": "归档",
+      "cancel": "取消",
+      "button": "归档笔记",
+      "confirm": "将这篇笔记移至归档?"
+    },
+    "NPopover": {
+      "button": "查看色彩说明",
+      "title": "青绿",
+      "content": "青绿用于主要操作与选中状态, 大面积背景使用中性色"
+    },
+    "NPopselect": {
+      "paper": "暖纸",
+      "ink": "墨黑",
+      "primary": "青绿",
+      "current": "当前颜色: {label}",
+      "button": "选择颜色"
+    },
+    "NProgress": {
+      "advance": "增加 10%",
+      "restart": "重新开始"
+    },
+    "NResult": {
+      "connected": "加载成功",
+      "unavailable": "页面暂不可用",
+      "restored": "当前展示操作成功的结果样式",
+      "expired": "当前展示页面缺失时的结果样式",
+      "empty": "查看缺失状态",
+      "reload": "查看成功状态"
+    },
+    "NSkeleton": {
+      "title": "文章标题",
+      "content": "加载时用骨架屏占位, 完成后显示内容",
+      "show": "显示内容",
+      "reload": "再次加载"
+    },
+    "NSpin": {
+      "description": "正在加载",
+      "title": "加载中",
+      "content": "点击按钮可切换加载状态",
+      "show": "显示内容",
+      "refresh": "重新加载"
+    },
+    "NThemeEditor": {
+      "title": "Naive UI 主题调试器",
+      "description": "打开右下角的调色盘, 可搜索变量并调整组件主题, 也可以导出配置",
+      "primary": "主要操作",
+      "secondary": "次要操作"
+    },
+    "NTooltip": {
+      "button": "查看快捷提示",
+      "content": "点击色卡复制 HEX 色值"
+    },
+    "DialogProviderActions": {
+      "infoTitle": "提示",
+      "infoContent": "此对话框通过 useDialog 打开",
+      "understood": "知道了",
+      "archiveTitle": "归档这篇笔记?",
+      "archiveContent": "这是确认对话框示例, 不会修改实际内容",
+      "archive": "归档",
+      "cancel": "取消",
+      "info": "显示提示",
+      "confirm": "确认归档"
+    },
+    "LoadingBarProviderActions": {
+      "description": "点击按钮可查看顶部进度条",
+      "save": "保存草稿"
+    },
+    "MessageProviderActions": {
+      "saved": "操作成功",
+      "success": "显示成功提示",
+      "draft": "当前预览不保存草稿",
+      "hint": "查看提示"
+    },
+    "ModalProviderActions": {
+      "title": "已归档",
+      "content": "当前弹窗展示归档结果, 不会修改笔记",
+      "open": "打开归档面板"
+    },
+    "NotificationProviderActions": {
+      "title": "已归档",
+      "content": "这条通知会在 3 秒后关闭",
+      "send": "发送归档通知"
+    },
+    "NAutoComplete": {
+      "kyoto": "京都",
+      "kanazawa": "金泽",
+      "kamakura": "镰仓",
+      "placeholder": "搜索目的地"
+    },
+    "NCascader": {
+      "japan": "日本",
+      "kansai": "关西",
+      "kyoto": "京都",
+      "osaka": "大阪",
+      "hokuriku": "北陆",
+      "kanazawa": "金泽",
+      "placeholder": "选择地区"
+    },
+    "NCheckbox": {
+      "label": "订阅每月工作室动态"
+    },
+    "NCheckboxGroup": {
+      "ceramics": "陶艺",
+      "textiles": "纺织品",
+      "printmaking": "版画"
+    },
+    "NDynamicInput": {
+      "paper": "暖纸",
+      "ink": "水墨",
+      "placeholder": "添加材质"
+    },
+    "NDynamicTags": {
+      "handmade": "手作",
+      "smallBatch": "小批量"
+    },
+    "NForm": {
+      "title": "本周项目记录",
+      "journalTitle": "日记标题",
+      "email": "联系邮箱"
+    },
+    "NFormItem": {
+      "value": "本周的页面更新与组件调整",
+      "label": "项目简介",
+      "feedback": "简要说明项目内容",
+      "placeholder": "填写项目简介"
+    },
+    "NFormItemCol": {
+      "label": "栅格表单项",
+      "placeholder": "填写内容"
+    },
+    "NFormItemGi": {
+      "name": "姓名",
+      "role": "角色",
+      "maker": "手艺人"
+    },
+    "NFormItemGridItem": {
+      "name": "姓名",
+      "role": "角色",
+      "maker": "手艺人"
+    },
+    "NFormItemRow": {
+      "label": "整行表单项",
+      "placeholder": "填写内容"
+    },
+    "NInput": {
+      "value": "下周一起检查新版页面",
+      "placeholder": "写一条留言"
+    },
+    "NInputGroupLabel": {
+      "value": "日记"
+    },
+    "NLegacyTransfer": {
+      "paper": "暖纸",
+      "ink": "墨黑",
+      "sage": "鼠尾草绿"
+    },
+    "NMention": {
+      "value": "请 {at}Mira 检查新版配色",
+      "placeholder": "输入 {at} 提及协作者"
+    },
+    "NRadio": {
+      "label": "银行卡支付"
+    },
+    "NRadioButton": {
+      "linen": "亚麻",
+      "primary": "青绿",
+      "ink": "墨色"
+    },
+    "NRadioGroup": {
+      "weekly": "每周更新",
+      "monthly": "每月摘要",
+      "none": "不接收邮件"
+    },
+    "NSelect": {
+      "matte": "哑光釉",
+      "gloss": "亮光釉",
+      "unglazed": "无釉",
+      "placeholder": "选择表面效果"
+    },
+    "NTransfer": {
+      "wheel": "陶艺拉坯机",
+      "studio": "共享工作室",
+      "kiln": "窑炉使用权",
+      "shelves": "开放式置物架"
+    },
+    "NTreeSelect": {
+      "tableware": "餐具",
+      "bowls": "茶碗",
+      "plates": "餐盘",
+      "vases": "花瓶",
+      "placeholder": "选择一个系列"
+    },
+    "NUpload": {
+      "chooseFile": "选择本地文件",
+      "fileName": "工作室笔记.pdf"
+    },
+    "NUploadDragger": {
+      "drop": "将文件拖到此处",
+      "browse": "或点击选择文件",
+      "fileName": "工作室笔记.pdf"
+    },
+    "NUploadFileList": {
+      "fileName": "工作室笔记.pdf"
+    },
+    "NUploadTrigger": {
+      "chooseFile": "选择本地文件"
+    },
+    "NA": {
+      "open": "打开此区域",
+      "content": "这是链接指向的内容"
+    },
+    "NAffix": {
+      "instruction": "滚动预览区域, 查看元素的固定效果",
+      "pinned": "固定在预览中",
+      "end": "已到预览区域底部"
+    },
+    "NAnchor": {
+      "introduction": "简介",
+      "details": "详情"
+    },
+    "NAnchorLink": {
+      "readDetails": "阅读详情",
+      "linkedDetails": "关联详情"
+    },
+    "NBackTop": {
+      "title": "面板滚动示例",
+      "instruction": "滚动此面板; 回到顶部按钮位于面板内",
+      "end": "已到预览区域底部"
+    },
+    "NBlockquote": {
+      "quote": "相关内容靠近, 不同区域之间留出间距"
+    },
+    "NBreadcrumb": {
+      "home": "首页",
+      "library": "组件库",
+      "current": "当前页面"
+    },
+    "NBreadcrumbItem": {
+      "workspace": "工作区",
+      "projects": "项目",
+      "current": "当前视图"
+    },
+    "NButton": {
+      "continue": "继续"
+    },
+    "NButtonGroup": {
+      "previous": "上一步",
+      "next": "下一步"
+    },
+    "NCard": {
+      "title": "项目动态",
+      "content": "本周调整了配色与表单布局"
+    },
+    "NCol": {
+      "half": "二分之一宽"
+    },
+    "NCollapse": {
+      "shipping": "配送",
+      "shippingContent": "订单会在两个工作日内发出",
+      "returns": "退货",
+      "returnsContent": "支持在 30 天内退货"
+    },
+    "NCollapseItem": {
+      "delivery": "配送信息",
+      "tracking": "发货后可在此查看物流信息",
+      "payment": "付款方式",
+      "paymentMethods": "支持银行卡和数字钱包"
+    },
+    "NCollapseTransition": {
+      "hide": "收起详情",
+      "show": "展开详情",
+      "content": "点击按钮可以展开或收起这段内容"
+    },
+    "NDivider": {
+      "first": "第一部分",
+      "second": "第二部分"
+    },
+    "NEl": {
+      "content": "带主题样式的 article 元素"
+    },
+    "NElement": {
+      "content": "带主题样式的 section 元素"
+    },
+    "NFlex": {
+      "content": "灵活排列的内容",
+      "action": "操作"
+    },
+    "NFloatButton": {
+      "content": "在此预览区域内定位"
+    },
+    "NFloatButtonGroup": {
+      "content": "紧凑的操作组"
+    },
+    "NGi": {
+      "item": "网格项"
+    },
+    "NGrid": {
+      "item": "网格项 {number}"
+    },
+    "NGridItem": {
+      "one": "一列",
+      "two": "两列"
+    },
+    "NH1": {
+      "heading": "页面标题"
+    },
+    "NH2": {
+      "heading": "章节标题"
+    },
+    "NH3": {
+      "heading": "小节标题"
+    },
+    "NH4": {
+      "heading": "文章标题"
+    },
+    "NH5": {
+      "heading": "小标题"
+    },
+    "NH6": {
+      "heading": "细节标题"
+    },
+    "NHr": {
+      "above": "上方区域",
+      "below": "下方区域"
+    },
+    "NLayout": {
+      "header": "工作区页眉",
+      "content": "工作区主要内容",
+      "footer": "页脚"
+    },
+    "NLayoutContent": {
+      "header": "页眉",
+      "content": "内容区域会随布局扩展",
+      "footer": "页脚"
+    },
+    "NLayoutFooter": {
+      "article": "文章",
+      "content": "页面更新已完成, 以下是调整记录",
+      "updated": "刚刚更新"
+    },
+    "NLayoutHeader": {
+      "header": "页面页眉",
+      "content": "页眉下方的内容"
+    },
+    "NLayoutSider": {
+      "overview": "概览",
+      "projects": "项目",
+      "project": "项目",
+      "workspace": "已选工作区"
+    },
+    "NLi": {
+      "reusable": "可复用的列表项",
+      "second": "第二个列表项"
+    },
+    "NList": {
+      "notes": "设计笔记",
+      "checklist": "发布清单",
+      "directory": "团队通讯录"
+    },
+    "NListItem": {
+      "checklist": "发布清单",
+      "updated": "今天更新",
+      "notes": "设计笔记"
+    },
+    "NMenu": {
+      "overview": "概览",
+      "projects": "项目",
+      "settings": "设置"
+    },
+    "NOl": {
+      "requirements": "收集需求",
+      "arrange": "整理内容",
+      "review": "检查结果"
+    },
+    "NP": {
+      "paragraph": "本次更新调整了主题配色, 组件接口保持不变"
+    },
+    "NPageHeader": {
+      "title": "项目概览",
+      "subtitle": "工作区摘要",
+      "activity": "查看近期活动与项目信息",
+      "newProject": "新建项目"
+    },
+    "NRow": {
+      "content": "三分之一宽"
+    },
+    "NScrollbar": {
+      "preview": "滚动条示例",
+      "instruction": "滚动查看剩余内容"
+    },
+    "NSpace": {
+      "save": "保存",
+      "preview": "预览",
+      "draft": "草稿"
+    },
+    "NSplit": {
+      "navigation": "导航面板",
+      "details": "可调整大小的详情面板"
+    },
+    "NStep": {
+      "details": "详情",
+      "basics": "填写基本信息",
+      "review": "检查",
+      "changes": "检查更改",
+      "publish": "发布",
+      "share": "分享给团队"
+    },
+    "NSteps": {
+      "details": "详情",
+      "basics": "填写基本信息",
+      "review": "检查",
+      "changes": "检查更改",
+      "publish": "发布",
+      "share": "分享给团队"
+    },
+    "NTab": {
+      "activity": "活动",
+      "members": "成员",
+      "instruction": "切换选项卡, 查看项目活动或成员"
+    },
+    "NTabPane": {
+      "activity": "活动",
+      "activityContent": "本周发布了三条动态",
+      "members": "成员",
+      "membersContent": "目前有四位项目成员"
+    },
+    "NTabs": {
+      "summary": "摘要",
+      "summaryContent": "查看本周的项目更新",
+      "files": "文件",
+      "filesContent": "在这里查看项目共享文件"
+    },
+    "NText": {
+      "content": "最后更新于今天"
+    },
+    "NThing": {
+      "title": "设计评审",
+      "updated": "10 分钟前更新",
+      "draft": "草稿",
+      "summary": "检查页面布局与组件状态",
+      "open": "打开"
+    },
+    "NUl": {
+      "related": "整理页面内容",
+      "concise": "确定组件状态",
+      "scan": "检查排版与间距"
+    },
+    "NxButton": {
+      "action": "更多操作"
+    }
+  }
+}

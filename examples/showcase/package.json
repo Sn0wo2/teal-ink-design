@@ -1,0 +1,22 @@
+{
+  "name": "@teal-ink/showcase",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 6006",
+    "build": "bun scripts/check-examples.ts && vue-tsc -p ../../tsconfig.json --noEmit && vite build",
+    "preview": "vite preview --port 6006"
+  },
+  "dependencies": {
+    "@teal-ink/vue": "workspace:*",
+    "vue": "3.5.44",
+    "vue-i18n": "11.4.16"
+  },
+  "devDependencies": {
+    "@fontsource-variable/noto-sans-mono": "5.3.0",
+    "@fontsource-variable/noto-sans-sc": "5.3.1",
+    "@fontsource-variable/noto-serif-sc": "5.3.1",
+    "highlight.js": "11.12.0",
+    "katex": "0.19.1"
+  }
+}

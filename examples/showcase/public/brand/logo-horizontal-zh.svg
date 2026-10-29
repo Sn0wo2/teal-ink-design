@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 40" color="#141413" role="img" aria-label="青墨">
+  <title>青墨</title>
+  <g transform="translate(-2 -4) scale(.5)">
+    <path fill="currentColor" d="M43 31C34 24 25 20 15 20Q12 20 12 23V64Q12 67 15 67C26 67 35 72 43 80V67C36 61 29 58 22 57V31C30 33 37 37 43 43Z"/>
+    <path fill="var(--ti-logo-accent, #39C5BB)" d="M53 29C61 21 70 16 82 14C86 50 78 70 53 82V68C69 58 75 46 73 29C65 32 59 36 53 42Z"/>
+  </g>
+  <text x="58" y="33" fill="currentColor" font-family="'Noto Sans SC Variable','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif" font-size="34" font-weight="500" letter-spacing="2"><tspan fill="var(--ti-logo-accent, #39C5BB)">青</tspan>墨</text>
+</svg>
