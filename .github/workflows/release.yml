@@ -1,0 +1,149 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      snapshot:
+        description: Build a snapshot without publishing
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: release-${{ inputs.snapshot && 'snapshot' || 'publish' }}-${{ github.ref }}
+  cancel-in-progress: ${{ inputs.snapshot == true }}
+
+jobs:
+  check-release:
+    if: github.ref_type == 'tag' && !inputs.snapshot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      skip: ${{ steps.release.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check for an already published release
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/check-release.js
+
+  snapshot:
+    if: inputs.snapshot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run ci
+
+      - run: mkdir -p dist
+
+      - name: Pack Vue library
+        run: bun pm pack --ignore-scripts --destination ../../dist
+        working-directory: packages/teal-ink
+
+      - name: Archive showcase and create checksums
+        run: |
+          tar -czf dist/teal-ink-showcase.tar.gz -C examples/showcase dist
+          (cd dist && sha256sum *.tgz *.tar.gz > SHA256SUMS)
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: release-snapshot
+          path: dist/*
+          compression-level: 0
+          retention-days: 7
+          if-no-files-found: error
+
+  release:
+    needs: check-release
+    if: >-
+      github.ref_type == 'tag' && !inputs.snapshot &&
+      needs.check-release.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          package_version="$(node -p "require('./packages/teal-ink/package.json').version")"
+          if [[ "$RELEASE_TAG" != "v$package_version" ]]; then
+            echo "::error::Release tag $RELEASE_TAG does not match package version v$package_version."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run ci
+
+      - run: mkdir -p dist
+
+      - name: Pack Vue library
+        run: bun pm pack --ignore-scripts --destination ../../dist
+        working-directory: packages/teal-ink
+
+      - name: Archive showcase and create checksums
+        run: |
+          tar -czf dist/teal-ink-showcase.tar.gz -C examples/showcase dist
+          (cd dist && sha256sum *.tgz *.tar.gz > SHA256SUMS)
+
+      - name: Create or update draft release and publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if [[ "$RELEASE_TAG" == *-* ]]; then
+            prerelease=true
+          else
+            prerelease=false
+          fi
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TAG" --notes "Teal Ink Vue library and showcase assets for $RELEASE_TAG."
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --draft \
+              --title "$RELEASE_TAG" --notes "Teal Ink Vue library and showcase assets for $RELEASE_TAG."
+          fi
+
+          gh release upload "$RELEASE_TAG" dist/*.tgz dist/*.tar.gz dist/SHA256SUMS --clobber
+          release_id="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq .id)"
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/$release_id" \
+            -F draft=false -F "prerelease=$prerelease" >/dev/null

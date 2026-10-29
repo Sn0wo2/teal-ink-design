@@ -1,0 +1,12 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":automergeMinor", ":rebaseStalePrs", "mergeConfidence:all-badges"],
+  "autoApprove": true,
+  "packageRules": [
+    {
+      "matchPackageNames": ["typescript", "@typescript/typescript6", "vue-tsc"],
+      "groupName": "Vue TypeScript toolchain",
+      "automerge": false
+    }
+  ]
+}

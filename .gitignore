@@ -4,3 +4,17 @@ dist/
 *.tsbuildinfo
 *.log
 .DS_Store
+.env
+.env.*
+!.env.example
+coverage/
+*.lcov
+.nyc_output/
+.cache/
+.npm/
+.vite/
+.eslintcache
+.stylelintcache
+*.tgz
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+vite.config.*.timestamp-*

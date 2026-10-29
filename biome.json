@@ -1,0 +1,143 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["**", "!**/*.svg"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "linter": {
+    "rules": {
+      "preset": "recommended",
+      "complexity": {
+        "useLiteralKeys": "off",
+        "noStaticOnlyClass": "error",
+        "noUnnecessaryTemplateExpression": "error",
+        "noUselessCatch": "error",
+        "noUselessConstructor": "error",
+        "noUselessRename": "error",
+        "noUselessStringConcat": "error",
+        "noUselessTernary": "error",
+        "noUselessThisAlias": "error",
+        "noUselessTypeConstraint": "error",
+        "useSimplifiedLogicExpression": "error"
+      },
+      "correctness": {
+        "noUndeclaredDependencies": "error",
+        "noUndeclaredVariables": "error",
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error",
+        "noUnusedPrivateClassMembers": "error",
+        "noUnusedVariables": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "error",
+        "noMisusedPromises": "error",
+        "useExhaustiveSwitchCases": {
+          "level": "error",
+          "options": {
+            "requireExplicitCase": true
+          }
+        },
+        "useExplicitType": "off",
+        "usePromiseRejectErrors": "error"
+      },
+      "performance": {
+        "useTopLevelRegex": "error"
+      },
+      "security": {
+        "noSecrets": "error"
+      },
+      "style": {
+        "noInferrableTypes": "error",
+        "noNonNullAssertion": "error",
+        "noUselessElse": "error",
+        "useCollapsedElseIf": "error",
+        "useConsistentArrowReturn": {
+          "level": "error",
+          "options": {
+            "style": "asNeeded",
+            "requireForObjectLiteral": false
+          }
+        },
+        "useErrorCause": "error",
+        "useNodeAssertStrict": "error",
+        "useNodejsImportProtocol": "error",
+        "useNumericSeparators": "error",
+        "useThrowNewError": "error",
+        "useThrowOnlyError": "error",
+        "useVueMultiWordComponentNames": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noTsIgnore": "error",
+        "useAwait": "error",
+        "useErrorMessage": "error"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded"
+    }
+  },
+  "html": {
+    "experimentalFullSupportEnabled": true
+  },
+  "markdown": {
+    "formatter": {
+      "enabled": false
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["examples/showcase/src/App.vue", "packages/teal-ink/src/components/TiProvider.vue"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useScopedStyles": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "examples/showcase/src/components/ComponentWorkshop.vue",
+        "packages/teal-ink/src/components/TiThemeSwitch.vue"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["examples/showcase/src/components/ComponentWorkshop.vue"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noDynamicNamespaceImportAccess": "off"
+          }
+        }
+      }
+    }
+  ]
+}

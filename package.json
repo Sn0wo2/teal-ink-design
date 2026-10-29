@@ -3,19 +3,31 @@
   "private": true,
   "type": "module",
   "packageManager": "bun@1.4.4",
-  "workspaces": ["packages/*", "examples/*"],
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
   "scripts": {
     "dev": "bun run build:lib && bun run --cwd examples/showcase dev",
+    "lint": "biome check --error-on-warnings .",
+    "lint:fix": "biome check --write --error-on-warnings .",
     "check": "vue-tsc -p tsconfig.json --noEmit",
+    "test": "bun run build:lib && bun run --cwd examples/showcase test",
     "build": "bun run build:lib && bun run build:showcase",
     "build:lib": "bun run --cwd packages/teal-ink build",
     "build:showcase": "bun run --cwd examples/showcase build",
-    "preview": "bun run --cwd examples/showcase preview"
+    "preview": "bun run --cwd examples/showcase preview",
+    "clean": "node --input-type=module -e \"import { rmSync } from 'node:fs'; for (const path of ['dist', 'packages/teal-ink/dist', 'examples/showcase/dist', 'node_modules/.vite', 'examples/showcase/node_modules/.vite']) rmSync(path, { recursive: true, force: true });\"",
+    "security": "bun audit --registry=https://registry.npmjs.org",
+    "ci": "bun run lint && bun run check && bun run test && bun run build && bun run security"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
     "@types/node": "^26.6.6",
     "@typescript/typescript6": "^6.0.2",
-    "@vitejs/plugin-vue": "6.0.10",
     "sass-embedded": "1.106.1",
     "typescript": "7.0.2",
     "vite": "8.3.5",
