@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NHr, NFlex, NText } from '@teal-ink/vue'
+import { NFlex, NHr, NText } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { type DataTableColumns, NDataTable } from '@teal-ink/vue'
 import { computed } from 'vue'
-import { NDataTable, type DataTableColumns } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NColorPicker, palette } from '@teal-ink/vue'
+import { ref } from 'vue'
 
 const value = ref<string>(palette.primary)
 </script>

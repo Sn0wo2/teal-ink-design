@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NSlider } from '@teal-ink/vue'
+import { ref } from 'vue'
 
 const value = ref(68)
 </script>

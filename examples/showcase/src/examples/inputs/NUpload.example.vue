@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { NUpload, TiButton, type UploadFileInfo } from '@teal-ink/vue'
 import { ref, watch } from 'vue'
-import { TiButton, NUpload, type UploadFileInfo } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

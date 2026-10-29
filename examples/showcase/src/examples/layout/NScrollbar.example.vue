@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiCard, NFlex, NP, NScrollbar } from '@teal-ink/vue'
+import { NFlex, NP, NScrollbar, TiCard } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiButton, NAlert, NButton, NConfigProvider, NFlex, NP, createThemeOverrides, useTiTheme } from '@teal-ink/vue'
+import { createThemeOverrides, NAlert, NButton, NConfigProvider, NFlex, NP, TiButton, useTiTheme } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { theme } = useTiTheme()

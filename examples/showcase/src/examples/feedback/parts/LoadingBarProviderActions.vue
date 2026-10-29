@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiButton, NFlex, NText, useLoadingBar } from '@teal-ink/vue'
+import { NFlex, NText, TiButton, useLoadingBar } from '@teal-ink/vue'
 import { onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 

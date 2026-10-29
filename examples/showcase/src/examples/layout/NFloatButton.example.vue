@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiCard, NFloatButton, NText } from '@teal-ink/vue'
+import { NFloatButton, NText, TiCard } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

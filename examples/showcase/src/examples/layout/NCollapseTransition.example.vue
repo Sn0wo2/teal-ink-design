@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiCard, NButton, NCollapseTransition, NFlex } from '@teal-ink/vue'
+import { NButton, NCollapseTransition, NFlex, TiCard } from '@teal-ink/vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 

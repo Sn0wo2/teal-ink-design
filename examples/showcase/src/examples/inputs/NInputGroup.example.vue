@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NInput, NInputGroup, NInputGroupLabel } from '@teal-ink/vue'
+import { ref } from 'vue'
 
 const value = ref('slowstudio.example')
 </script>

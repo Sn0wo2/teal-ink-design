@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 6006",
-    "build": "bun scripts/check-examples.ts && vue-tsc -p ../../tsconfig.json --noEmit && vite build",
+    "test": "bun scripts/check-examples.ts",
+    "build": "bun run test && vue-tsc -p ../../tsconfig.json --noEmit && vite build",
     "preview": "vite preview --port 6006"
   },
   "dependencies": {
@@ -16,7 +17,9 @@
     "@fontsource-variable/noto-sans-mono": "5.3.0",
     "@fontsource-variable/noto-sans-sc": "5.3.1",
     "@fontsource-variable/noto-serif-sc": "5.3.1",
+    "@vitejs/plugin-vue": "6.0.10",
     "highlight.js": "11.12.0",
-    "katex": "0.19.1"
+    "katex": "0.19.1",
+    "vite": "8.3.5"
   }
 }

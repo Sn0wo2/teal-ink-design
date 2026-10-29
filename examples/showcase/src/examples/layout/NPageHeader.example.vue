@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton, NPageHeader, NP, NText } from '@teal-ink/vue'
+import { NButton, NP, NPageHeader, NText } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

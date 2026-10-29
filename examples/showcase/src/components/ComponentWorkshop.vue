@@ -1,26 +1,48 @@
 <script setup lang="ts">
 import * as library from '@teal-ink/vue'
 import {
-  TiButton, TiInput, TiTag, NCode, NDataTable, NElement, NEmpty, NFlex,
-  NFormItem, NH2, NH3, NMenu, NScrollbar, NSelect, NTabPane, NTabs, NText, useTiTheme,
+  NCode,
+  NDataTable,
+  NElement,
+  NEmpty,
+  NFlex,
+  NFormItem,
+  NH2,
+  NH3,
+  NMenu,
+  NScrollbar,
+  NSelect,
+  NTabPane,
+  NTabs,
+  NText,
+  TiButton,
+  TiInput,
+  TiTag,
+  useTiTheme,
 } from '@teal-ink/vue'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, type Component } from 'vue'
+import { type Component, computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { copyToClipboard } from '../utils/clipboard'
 import { useTabButtonProps } from '../utils/composables'
 
 const groups = ['teal', 'inputs', 'display', 'feedback', 'layout'] as const
+const exampleSuffix = /\.example\.vue$/
+const privateProp = /^(private|internal|builtinTheme)/
+const eventProp = /^on[A-Z]/
 
 const { t, locale } = useI18n({ useScope: 'global' })
 const exampleSources = import.meta.glob<string>('../examples/*/*.example.vue', { eager: true, query: '?raw', import: 'default' })
 const examples = Object.entries(import.meta.glob<Component>('../examples/*/*.example.vue', { eager: true, import: 'default' }))
   .map(([path, example]) => {
     const [directory, filename] = path.split('/').slice(-2)
-    const name = filename.replace(/\.example\.vue$/, '')
+    if (!(directory && filename)) throw new Error(`Invalid example path: ${path}`)
+    const name = filename.replace(exampleSuffix, '')
+    const source = exampleSources[path]
+    if (source === undefined) throw new Error(`Missing example source: ${path}`)
     return {
       name,
       example,
-      source: exampleSources[path],
+      source,
       group: directory as typeof groups[number],
       component: library[name as keyof typeof library] as Component,
     }
@@ -28,7 +50,11 @@ const examples = Object.entries(import.meta.glob<Component>('../examples/*/*.exa
 
 const initialName = new URLSearchParams(window.location.search).get('component')
 const selectedName = ref(examples.find((entry) => entry.name === initialName)?.name ?? 'TiButton')
-const selectedEntry = computed(() => examples.find((entry) => entry.name === selectedName.value)!)
+const selectedEntry = computed(() => {
+  const entry = examples.find((entry) => entry.name === selectedName.value)
+  if (!entry) throw new Error(`Unknown component example: ${selectedName.value}`)
+  return entry
+})
 const searchText = ref('')
 const categoryFilter = ref('all')
 const activeTab = ref<'preview' | 'source' | 'api' | 'import'>('preview')
@@ -71,11 +97,11 @@ const previewFrameSrc = computed(() => {
   return `${url.pathname}${url.search}`
 })
 const propRows = computed(() => Object.entries((selectedEntry.value.component as { props?: Record<string, unknown> }).props ?? {})
-  .filter(([name]) => !/^(private|internal|builtinTheme)/.test(name)).map(([name, value]) => {
+  .filter(([name]) => !privateProp.test(name)).map(([name, value]) => {
     const prop = value && typeof value === 'object' ? value as { type?: unknown; default?: unknown } : { type: value }
     return {
       name,
-      category: t(/^on[A-Z]/.test(name) ? 'workshop.events' : 'workshop.props'),
+      category: t(eventProp.test(name) ? 'workshop.events' : 'workshop.props'),
       type: [prop.type].flat().filter((type): type is { name: string } => typeof type === 'function').map((type) => type.name.toLowerCase()).join(' | ') || t('workshop.unknownType'),
       defaultValue: typeof prop.default === 'function' ? t('workshop.factoryDefault') : String(prop.default ?? '—'),
     }
@@ -92,16 +118,19 @@ function selectComponent(name: string) {
   window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`)
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('popstate', () => {
     const name = new URLSearchParams(window.location.search).get('component')
     selectedName.value = examples.find((entry) => entry.name === name)?.name ?? 'TiButton'
     activeTab.value = 'preview'
     copyMessage.value = ''
   }, { signal: locationEvents.signal })
-  if (examples.some((entry) => entry.name === initialName)) nextTick(() => document.getElementById('components')?.scrollIntoView({
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start',
-  }))
+  if (examples.some((entry) => entry.name === initialName)) {
+    await nextTick()
+    document.getElementById('components')?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start',
+    })
+  }
 })
 onBeforeUnmount(() => locationEvents.abort())
 </script>
@@ -136,7 +165,7 @@ onBeforeUnmount(() => locationEvents.abort())
                 :node-props="option => ({ tabindex: option.type === 'group' ? undefined : 0, 'data-component': String(option.key) })"
                 @update:value="selectComponent" @keydown="(event: KeyboardEvent) => {
                   if (event.key !== 'Enter' && event.key !== ' ') return
-                  const name = (event.target as HTMLElement).dataset.component
+                   const name = (event.target as HTMLElement).getAttribute('data-component')
                   if (!name) return
                   event.preventDefault()
                   selectComponent(name)

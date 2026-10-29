@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NPagination } from '@teal-ink/vue'
+import { ref } from 'vue'
 
 const page = ref(2)
 </script>

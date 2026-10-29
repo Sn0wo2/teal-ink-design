@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiCard, NGrid, NGridItem } from '@teal-ink/vue'
+import { NGrid, NGridItem, TiCard } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

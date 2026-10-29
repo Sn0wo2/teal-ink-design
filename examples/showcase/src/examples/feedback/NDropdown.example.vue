@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiButton, NDropdown, NFlex, NText } from '@teal-ink/vue'
+import { NDropdown, NFlex, NText, TiButton } from '@teal-ink/vue'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -16,7 +16,7 @@ const options = computed(() => [
 
 <template>
   <NFlex vertical :size="16" style="max-width: 640px">
-    <NText aria-live="polite">{{ t('examples.NDropdown.recent', { action: chosen ? t('examples.NDropdown.' + (chosen)) : t('examples.NDropdown.none') }) }}</NText>
+    <NText aria-live="polite">{{ t('examples.NDropdown.recent', { action: chosen ? t(`examples.NDropdown.${chosen}`) : t('examples.NDropdown.none') }) }}</NText>
     <NDropdown
       v-model:show="show"
       :options="options"

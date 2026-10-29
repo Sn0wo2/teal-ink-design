@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref, watchEffect } from "vue";
-import { useI18n } from "vue-i18n";
-import { TiProvider, dateEnUS, dateZhCN, enUS, zhCN, type TiColorMode } from "@teal-ink/vue";
+import { dateEnUS, dateZhCN, enUS, type TiColorMode, TiProvider, zhCN } from "@teal-ink/vue";
 import hljs from "highlight.js/lib/core";
+import css from "highlight.js/lib/languages/css";
 import javascript from "highlight.js/lib/languages/javascript";
+import scss from "highlight.js/lib/languages/scss";
 import typescript from "highlight.js/lib/languages/typescript";
 import xml from "highlight.js/lib/languages/xml";
-import css from "highlight.js/lib/languages/css";
-import scss from "highlight.js/lib/languages/scss";
+import { defineAsyncComponent, ref, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
 import Showcase from "./Showcase.vue";
 
 hljs.registerLanguage("javascript", javascript);
@@ -28,7 +28,7 @@ const StandaloneExample = defineAsyncComponent(
 watchEffect(() => {
   document.documentElement.lang = locale.value;
   document.title = t("app.title");
-  document.querySelector('meta[name="description"]')?.setAttribute("content", t("app.description"));
+  document.getElementsByName('description')[0]?.setAttribute("content", t("app.description"));
   try { localStorage.setItem("teal-ink-locale", locale.value); } catch {}
   const url = new URL(location.href);
   url.searchParams.set("lang", locale.value);

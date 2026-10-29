@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NInputNumber } from '@teal-ink/vue'
+import { ref } from 'vue'
 
 const value = ref<number | null>(24)
 </script>

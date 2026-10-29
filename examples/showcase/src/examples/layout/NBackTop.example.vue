@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiCard, NBackTop, NFlex, NP, NText } from '@teal-ink/vue'
+import { NBackTop, NFlex, NP, NText, TiCard } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 import { useElementRef } from '../../utils/composables'
 
@@ -17,7 +17,7 @@ const { element: target, setElement } = useElementRef()
     <NBackTop
       v-if="target"
       :to="target"
-      :listen-to="() => target!"
+      :listen-to="target"
       show
       :right="12"
       :bottom="12"

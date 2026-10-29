@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NRadio } from '@teal-ink/vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const checked = ref(true)

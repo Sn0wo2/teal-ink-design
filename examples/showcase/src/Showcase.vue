@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, watchEffect } from "vue";
-import { useI18n } from "vue-i18n";
-import { themeIcons } from "./assets/icons";
-import { copyToClipboard } from "./utils/clipboard";
-import { useTranslatedRef } from "./utils/composables";
 import {
-  TiButton,
-  TiInput,
-  TiLogo,
-  TiTag,
-  TiThemeSwitch,
   NCheckbox,
   NCode,
   NDropdown,
   NProgress,
   NSwitch,
   palette,
+  TiButton,
+  TiInput,
+  TiLogo,
+  TiTag,
+  TiThemeSwitch,
   themes,
   useTiMessage,
   useTiTheme,
 } from "@teal-ink/vue";
+import { computed, defineAsyncComponent, ref, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
+import { themeIcons } from "./assets/icons";
+import { copyToClipboard } from "./utils/clipboard";
+import { useTranslatedRef } from "./utils/composables";
 
 const { t, locale } = useI18n({ useScope: "global" });
 const ComponentWorkshop = defineAsyncComponent(
@@ -54,7 +54,10 @@ async function copy(value: string) {
 }
 
 function saveNote() {
-  if (!note.value.trim()) return message.warning(t("showcase.emptyNote"));
+  if (!note.value.trim()) {
+    message.warning(t("showcase.emptyNote"));
+    return;
+  }
   savedNote.value = note.value;
   message.success(t("showcase.saved"));
 }
@@ -213,8 +216,9 @@ function saveNote() {
             </div>
             <div class="workspace-footer">
               <span>{{ t("showcase.previewOnly") }}</span>
-              <label class="focus-toggle">
+              <label for="focus-toggle" class="focus-toggle">
                 {{ t("showcase.focus") }}<NSwitch
+                  id="focus-toggle"
                   v-model:value="quiet"
                   size="small"
                   :aria-label="t('showcase.focus')"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiCard, TiProvider, dateEnUS, dateZhCN, enUS, useTiTheme, zhCN } from '@teal-ink/vue'
+import { dateEnUS, dateZhCN, enUS, TiCard, TiProvider, useTiTheme, zhCN } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 import TiThemeSwitchExample from './TiThemeSwitch.example.vue'
 

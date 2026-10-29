@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiButton, NFlex, useNotification } from '@teal-ink/vue'
+import { NFlex, TiButton, useNotification } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const notification = useNotification()

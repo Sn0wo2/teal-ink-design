@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NRate } from '@teal-ink/vue'
+import { ref } from 'vue'
 
 const value = ref(4)
 </script>

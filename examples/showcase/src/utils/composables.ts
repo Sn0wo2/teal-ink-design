@@ -1,4 +1,4 @@
-import { computed, ref, watch, type Ref } from 'vue'
+import { computed, type Ref, ref, watch } from 'vue'
 
 /** Creates a ref initialized from a translated value that re-syncs on locale change until the user edits it. */
 export function useTranslatedRef<T>(translate: () => T) {
@@ -6,9 +6,12 @@ export function useTranslatedRef<T>(translate: () => T) {
   const value = ref(source.value) as Ref<T>
   watch(source, (next, previous) => {
     const current = value.value as unknown
-    if (Array.isArray(current) && Array.isArray(previous)
-      ? current.length === previous.length && current.every((item, index) => item === previous[index])
-      : current === previous) value.value = next
+    if (
+      Array.isArray(current) && Array.isArray(previous)
+        ? current.length === previous.length && current.every((item, index) => item === previous[index])
+        : current === previous
+    )
+      value.value = next
   })
   return value
 }
@@ -19,9 +22,8 @@ export function useElementRef() {
   return {
     element,
     setElement(instance: unknown) {
-      element.value = instance && typeof instance === 'object' && '$el' in instance
-        ? instance.$el as HTMLElement
-        : null
+      element.value =
+        instance && typeof instance === 'object' && '$el' in instance ? (instance.$el as HTMLElement) : null
     },
   }
 }

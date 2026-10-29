@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiButton, NUpload, NUploadFileList, NUploadTrigger } from '@teal-ink/vue'
+import { NUpload, NUploadFileList, NUploadTrigger, TiButton } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({ useScope: 'global' })

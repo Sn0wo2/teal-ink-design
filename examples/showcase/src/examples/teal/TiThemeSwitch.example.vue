@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiThemeSwitch, NFlex, NText } from '@teal-ink/vue'
+import { NFlex, NText, TiThemeSwitch } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
 import { themeIcons } from '../../assets/icons'
 

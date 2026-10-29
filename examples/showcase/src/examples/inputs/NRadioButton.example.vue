@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { NRadioButton, NRadioGroup } from '@teal-ink/vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const value = ref('linen')

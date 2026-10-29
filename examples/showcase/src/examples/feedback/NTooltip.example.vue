@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TiButton, NFlex, NTooltip } from '@teal-ink/vue'
+import { NFlex, NTooltip, TiButton } from '@teal-ink/vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 

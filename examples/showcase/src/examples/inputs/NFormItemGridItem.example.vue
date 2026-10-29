@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
 import { NForm, NFormItemGridItem, NGrid, NInput } from '@teal-ink/vue'
+import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useTranslatedRef } from '../../utils/composables'
 

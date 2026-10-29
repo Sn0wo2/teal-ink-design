@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { TiButton, NDrawer, NDrawerContent, NFlex, NP } from '@teal-ink/vue'
+import { NDrawer, NDrawerContent, NFlex, NP, TiButton } from '@teal-ink/vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+
  
 const show = ref(false)
 const { t } = useI18n({ useScope: 'global' })

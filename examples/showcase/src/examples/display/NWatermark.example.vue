@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { TiCard, NWatermark, palette } from '@teal-ink/vue'
+import { NWatermark, palette, TiCard } from '@teal-ink/vue'
 import { useI18n } from 'vue-i18n'
+
  
 const { t } = useI18n({ useScope: 'global' })
 </script>
