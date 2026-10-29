@@ -3,8 +3,14 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Teal Ink theme and Vue components, built on Naive UI",
-  "files": ["dist", "src"],
-  "sideEffects": ["**/*.css", "**/*.scss"],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,5 +33,9 @@
   },
   "dependencies": {
     "naive-ui": "2.45.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.10",
+    "vite": "8.3.5"
   }
 }

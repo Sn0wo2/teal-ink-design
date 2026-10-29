@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue'
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
 import { NInput } from 'naive-ui'
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
+import { computed, useId } from 'vue'
 
 const props = withDefaults(defineProps<{
   id?: string
@@ -40,13 +40,15 @@ const inputId = computed(() => props.id || `ti-input-${generatedId}`)
     <NInput
       :value="modelValue"
       :type="type"
-      :placeholder="placeholder"
+      v-bind="{
+        ...(placeholder === undefined ? {} : { placeholder }),
+        ...(status === undefined ? {} : { status }),
+        ...(maxlength === undefined ? {} : { maxlength }),
+      }"
       :size="size"
       :disabled="disabled"
       :readonly="readonly"
       :clearable="clearable"
-      :status="status"
-      :maxlength="maxlength"
       :input-props="{
         ...Object.fromEntries(Object.entries($attrs).filter(([key]) => key !== 'class' && key !== 'style')),
         id: inputId,

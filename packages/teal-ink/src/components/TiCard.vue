@@ -15,23 +15,22 @@ defineOptions({ inheritAttrs: false })
 
 <template>
   <NCard
-    v-bind="$attrs"
+    v-bind="{ ...$attrs, ...(title === undefined ? {} : { title }) }"
     class="ti-card"
     :style="{
       backgroundColor: raised ? 'var(--ti-color-raised)' : 'var(--ti-color-surface)',
       boxShadow: raised ? 'var(--ti-shadow-floating)' : undefined,
     }"
-    :title="title"
     :size="size"
   >
-    <template v-if="$slots.header" #header>
+    <template v-if="$slots['header']" #header>
       <slot name="header" />
     </template>
     <template v-if="$slots['header-extra']" #header-extra>
       <slot name="header-extra" />
     </template>
     <slot />
-    <template v-if="$slots.footer" #footer>
+    <template v-if="$slots['footer']" #footer>
       <slot name="footer" />
     </template>
   </NCard>

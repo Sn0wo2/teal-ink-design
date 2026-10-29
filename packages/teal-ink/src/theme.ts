@@ -1,5 +1,5 @@
 import type { GlobalThemeOverrides } from 'naive-ui'
-import { foundations, themes, type TiTheme } from './tokens'
+import { foundations, type TiTheme, themes } from './tokens'
 
 export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
   return {

@@ -2,6 +2,8 @@ import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
+const externalModule = /^(vue|naive-ui)(\/|$)/
+
 export default defineConfig({
   plugins: [vue()],
   build: {
@@ -12,7 +14,7 @@ export default defineConfig({
       cssFileName: 'style',
     },
     rollupOptions: {
-      external: (id) => /^(vue|naive-ui)(\/|$)/.test(id),
+      external: (id) => externalModule.test(id),
     },
   },
 })

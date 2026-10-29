@@ -1,4 +1,4 @@
-import { inject, type ComputedRef, type InjectionKey, type Ref } from 'vue'
+import { type ComputedRef, type InjectionKey, inject, type Ref } from 'vue'
 import type { TiColorMode, TiTheme } from './tokens'
 
 export interface TiThemeContext {

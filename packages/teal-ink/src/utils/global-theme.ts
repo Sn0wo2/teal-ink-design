@@ -13,7 +13,10 @@ export function setGlobalTheme(owner: symbol, theme?: TiTheme) {
         styles: new Map(
           [...Object.keys(createCssVariables(theme)), 'color-scheme'].map((key) => [
             key,
-            [document.documentElement.style.getPropertyValue(key), document.documentElement.style.getPropertyPriority(key)],
+            [
+              document.documentElement.style.getPropertyValue(key),
+              document.documentElement.style.getPropertyPriority(key),
+            ],
           ]),
         ),
       }
@@ -26,9 +29,11 @@ export function setGlobalTheme(owner: symbol, theme?: TiTheme) {
 
   const active = [...owners.values()].at(-1)
   if (active) {
-    document.documentElement.dataset.tiTheme = active
+    document.documentElement.dataset['tiTheme'] = active
     document.documentElement.style.colorScheme = active
-    Object.entries(createCssVariables(active)).forEach(([key, value]) => document.documentElement.style.setProperty(key, value))
+    Object.entries(createCssVariables(active)).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(key, value)
+    })
   } else if (previous) {
     if (previous.theme === null) document.documentElement.removeAttribute('data-ti-theme')
     else document.documentElement.setAttribute('data-ti-theme', previous.theme)

@@ -14,7 +14,8 @@ export type TiTheme = Exclude<TiColorMode, 'system'>
 export const foundations = {
   fontSans: '"Noto Sans SC Variable", "Noto Sans SC", "Noto Sans", sans-serif',
   fontSerif: '"Noto Serif SC Variable", "Noto Serif SC", "Noto Serif", serif',
-  fontMono: '"Noto Sans Mono Variable", "Noto Sans Mono", "Noto Sans Mono CJK SC", "Noto Sans SC Variable", "Noto Sans SC", monospace',
+  fontMono:
+    '"Noto Sans Mono Variable", "Noto Sans Mono", "Noto Sans Mono CJK SC", "Noto Sans SC Variable", "Noto Sans SC", monospace',
   fontEmoji: '"Noto Color Emoji", "Noto Emoji", emoji',
   fontSizeCaption: '0.6875rem',
   fontSizeLabel: '0.75rem',
@@ -94,9 +95,14 @@ export const themes = {
 export function createCssVariables(theme: TiTheme): Record<`--ti-${string}`, string> {
   return Object.fromEntries([
     ...Object.entries(palette).map(([key, value]) => [`--ti-palette-${key}`, value]),
-    ...Object.entries(foundations).map(([key, value]) => [`--ti-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`, value]),
+    ...Object.entries(foundations).map(([key, value]) => [
+      `--ti-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`,
+      value,
+    ]),
     ...Object.entries(themes[theme]).map(([key, value]) => [
-      key === 'shadowFloating' ? '--ti-shadow-floating' : `--ti-color-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`,
+      key === 'shadowFloating'
+        ? '--ti-shadow-floating'
+        : `--ti-color-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`,
       value,
     ]),
     ...[1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24].map((step) => [`--ti-space-${step}`, `${step * 4}px`]),

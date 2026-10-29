@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import type { NDateLocale, NLocale } from 'naive-ui'
 import {
+  darkTheme,
   NConfigProvider,
   NDialogProvider,
   NMessageProvider,
-  darkTheme,
 } from 'naive-ui'
-import type { NDateLocale, NLocale } from 'naive-ui'
 import { computed, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
 import { themeKey } from '../context'
 import { darkThemeOverrides, lightThemeOverrides } from '../theme'
@@ -63,7 +63,7 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
   document.documentElement.style.setProperty('--ti-theme-origin-x', `${x}px`)
   document.documentElement.style.setProperty('--ti-theme-origin-y', `${y}px`)
   document.documentElement.style.setProperty('--ti-theme-radius', `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`)
-  document.documentElement.dataset.tiTransition = ''
+  document.documentElement.dataset['tiTransition'] = ''
 
   const active = document.startViewTransition(update)
   void active.ready.catch(() => {})
@@ -88,9 +88,11 @@ watch([theme, () => props.global], () => {
 onMounted(() => {
   mounted = true
   if (props.global) setGlobalTheme(owner, theme.value)
-  preference?.addEventListener('change', () => {
-    if (requestedMode === 'system') void setMode('system')
-  }, { signal: systemEvents?.signal })
+  if (preference && systemEvents) {
+    preference.addEventListener('change', () => {
+      if (requestedMode === 'system') void setMode('system')
+    }, { signal: systemEvents.signal })
+  }
 })
 
 onBeforeUnmount(() => {
