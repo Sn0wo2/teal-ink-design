@@ -1,0 +1,21 @@
+diff --git a/index.js b/index.js
+index 69e1a71ada42a9563cbc2edb0567f86c42fa8fe6..763eb9249b5bea9a10cbf7d3785aba071f7210b1 100644
+--- a/index.js
++++ b/index.js
+@@ -70,7 +70,15 @@ function run(tscPath) {
+         }
+     }
+ }
+-function resolveTscPath(tscPath = require.resolve('typescript/lib/tsc')) {
++function resolveTscPath(tscPath) {
++  if (!tscPath) {
++    try {
++      tscPath = require.resolve('typescript/lib/tsc')
++    } catch {
++      // typescript v7 (native) no longer exposes the JS compiler; use the official TS6 bridge
++      tscPath = require.resolve('@typescript/typescript6/lib/tsc')
++    }
++  }
+     try {
+         const { name } = require(path.join(tscPath, '..', '..', 'package.json'));
+         if (name === '@typescript/typescript6') {

@@ -1,0 +1,27 @@
+{
+  "name": "teal-ink-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.4",
+  "workspaces": ["packages/*", "examples/*"],
+  "scripts": {
+    "dev": "bun run build:lib && bun run --cwd examples/showcase dev",
+    "check": "vue-tsc -p tsconfig.json --noEmit",
+    "build": "bun run build:lib && bun run build:showcase",
+    "build:lib": "bun run --cwd packages/teal-ink build",
+    "build:showcase": "bun run --cwd examples/showcase build",
+    "preview": "bun run --cwd examples/showcase preview"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@typescript/typescript6": "^6.0.2",
+    "@vitejs/plugin-vue": "6.0.10",
+    "sass-embedded": "1.106.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vue-tsc": "3.3.13"
+  },
+  "patchedDependencies": {
+    "vue-tsc@3.3.13": "patches/vue-tsc@3.3.13.patch"
+  }
+}
