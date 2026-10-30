@@ -1,26 +1,38 @@
-name: Publish to npm
+name: Release
 
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (e.g. 0.1.1)
+        required: true
+        type: string
+      snapshot:
+        description: Build a snapshot without bumping, tagging, or publishing
+        type: boolean
+        default: false
 
 permissions: {}
 
 concurrency:
-  group: npm-${{ github.ref }}
-  cancel-in-progress: false
+  group: release-${{ inputs.snapshot && format('snapshot-{0}', github.ref) || 'publish' }}
+  cancel-in-progress: ${{ inputs.snapshot == true }}
 
 jobs:
-  publish:
-    if: github.ref_type == 'tag'
+  release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
+    env:
+      PACKAGE_DIR: packages/teal-ink
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ (github.event_name == 'push' || inputs.snapshot == true) && github.ref || github.event.repository.default_branch }}
+          fetch-depth: 0
           persist-credentials: false
 
       - uses: actions/setup-node@v6
@@ -28,41 +40,106 @@ jobs:
           node-version-file: .node-version
           registry-url: https://registry.npmjs.org
 
-      - name: Update npm for trusted publishing
-        run: npm install --global npm@latest
-
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: package.json
 
-      - name: Validate release tag
+      - name: Update npm for trusted publishing
+        if: inputs.snapshot != true
+        run: npm install --global npm@latest
+
+      - name: Normalize version
+        id: version
+        if: inputs.snapshot != true
+        run: bun scripts/normalize-release-version.js "${{ inputs.version || github.ref_name }}"
+
+      - name: Check for an already published release
         id: release
+        if: inputs.snapshot != true
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun scripts/check-release.js "v$VERSION"
+
+      - name: Resume an existing release tag
+        if: github.event_name == 'workflow_dispatch' && inputs.snapshot != true && steps.release.outputs.skip != 'true'
         run: |
-          package_version="$(node -p "require('./packages/teal-ink/package.json').version")"
-          if [[ "$RELEASE_TAG" != "v$package_version" ]]; then
-            echo "::error::Release tag $RELEASE_TAG does not match package version v$package_version."
-            exit 1
+          if git show-ref --verify --quiet "refs/tags/v$VERSION"; then
+            git checkout --detach "v$VERSION"
           fi
 
-          if [[ "$package_version" == *-* ]]; then
-            echo "dist-tag=next" >> "$GITHUB_OUTPUT"
-          else
-            echo "dist-tag=latest" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Sync package version
+        id: sync
+        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        run: bun scripts/sync-release-version.js
 
-      - run: bun install --frozen-lockfile
+      - name: Reuse CI checks for this commit
+        if: >-
+          github.event_name == 'push' && inputs.snapshot != true &&
+          steps.release.outputs.skip != 'true' && steps.sync.outputs.changed != 'true'
+        timeout-minutes: 20
+        uses: lewagon/wait-on-check-action@v1.9.1
+        with:
+          ref: ${{ github.sha }}
+          check-name: Checks
+          repo-token: ${{ github.token }}
+          allowed-conclusions: success
 
-      - run: bun run ci
+      - name: Check the release candidate
+        if: >-
+          inputs.snapshot == true || (steps.release.outputs.skip != 'true' &&
+          (github.event_name == 'workflow_dispatch' || steps.sync.outputs.changed == 'true'))
+        run: |
+          bun install --frozen-lockfile
+          bun run ci
+
+      - name: Commit and publish the checked version
+        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: bun scripts/publish-release-commit.js
+
+      - name: Build library and showcase
+        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        run: bun run build
 
       - run: mkdir -p dist
+        if: inputs.snapshot == true || steps.release.outputs.skip != 'true'
 
       - name: Pack Vue library
+        if: inputs.snapshot == true || steps.release.outputs.skip != 'true'
         run: bun pm pack --ignore-scripts --destination ../../dist
         working-directory: packages/teal-ink
 
-      - name: Publish Vue library
+      - name: Archive showcase and create checksums
+        if: inputs.snapshot == true || steps.release.outputs.skip != 'true'
+        run: |
+          tar -czf dist/teal-ink-showcase.tar.gz -C examples/showcase dist
+          (cd dist && sha256sum *.tgz *.tar.gz > SHA256SUMS)
+
+      - name: Publish Vue library to npm
+        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
         env:
-          NPM_DIST_TAG: ${{ steps.release.outputs.dist-tag }}
-        run: npm publish ./dist/*.tgz --access public --tag "$NPM_DIST_TAG"
+          NPM_DIST_TAG: ${{ steps.version.outputs.dist-tag }}
+        run: |
+          package_name="$(node -p "require('./packages/teal-ink/package.json').name")"
+          if npm view "$package_name@$VERSION" version >/dev/null 2>&1; then
+            echo "Package $package_name@$VERSION is already published; skipping."
+          else
+            npm publish ./dist/*.tgz --access public --tag "$NPM_DIST_TAG"
+          fi
+
+      - name: Create or update GitHub release
+        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun scripts/create-github-release.js
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() && inputs.snapshot == true }}
+        with:
+          name: release-snapshot
+          path: dist/*
+          compression-level: 0
+          retention-days: 7
+          if-no-files-found: error
