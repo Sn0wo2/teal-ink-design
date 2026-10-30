@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Teal Ink theme and Vue components, built on Naive UI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sn0wo2/teal-ink-design.git",
+    "directory": "packages/teal-ink"
+  },
   "files": [
     "dist",
     "src"
