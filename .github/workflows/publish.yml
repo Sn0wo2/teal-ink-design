@@ -9,16 +9,11 @@ on:
         description: Version to release (e.g. 0.1.1)
         required: true
         type: string
-      snapshot:
-        description: Build a snapshot without bumping, tagging, or publishing
-        type: boolean
-        default: false
 
 permissions: {}
 
 concurrency:
-  group: release-${{ inputs.snapshot && format('snapshot-{0}', github.ref) || 'publish' }}
-  cancel-in-progress: ${{ inputs.snapshot == true }}
+  group: release
 
 jobs:
   release:
@@ -31,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ (github.event_name == 'push' || inputs.snapshot == true) && github.ref || github.event.repository.default_branch }}
+          ref: ${{ github.event_name == 'push' && github.ref || github.event.repository.default_branch }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -45,23 +40,20 @@ jobs:
           bun-version-file: package.json
 
       - name: Update npm for trusted publishing
-        if: inputs.snapshot != true
         run: npm install --global npm@latest
 
       - name: Normalize version
         id: version
-        if: inputs.snapshot != true
         run: bun scripts/normalize-release-version.js "${{ inputs.version || github.ref_name }}"
 
       - name: Check for an already published release
         id: release
-        if: inputs.snapshot != true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun scripts/check-release.js "v$VERSION"
 
       - name: Resume an existing release tag
-        if: github.event_name == 'workflow_dispatch' && inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        if: github.event_name == 'workflow_dispatch' && steps.release.outputs.skip != 'true'
         run: |
           if git show-ref --verify --quiet "refs/tags/v$VERSION"; then
             git checkout --detach "v$VERSION"
@@ -69,13 +61,13 @@ jobs:
 
       - name: Sync package version
         id: sync
-        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        if: steps.release.outputs.skip != 'true'
         run: bun scripts/sync-release-version.js
 
       - name: Reuse CI checks for this commit
         if: >-
-          github.event_name == 'push' && inputs.snapshot != true &&
-          steps.release.outputs.skip != 'true' && steps.sync.outputs.changed != 'true'
+          github.event_name == 'push' && steps.release.outputs.skip != 'true' &&
+          steps.sync.outputs.changed != 'true'
         timeout-minutes: 20
         uses: lewagon/wait-on-check-action@v1.9.1
         with:
@@ -86,39 +78,21 @@ jobs:
 
       - name: Check the release candidate
         if: >-
-          inputs.snapshot == true || (steps.release.outputs.skip != 'true' &&
-          (github.event_name == 'workflow_dispatch' || steps.sync.outputs.changed == 'true'))
+          steps.release.outputs.skip != 'true' &&
+          (github.event_name == 'workflow_dispatch' || steps.sync.outputs.changed == 'true')
         run: |
           bun install --frozen-lockfile
           bun run ci
 
       - name: Commit and publish the checked version
-        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        if: steps.release.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: bun scripts/publish-release-commit.js
 
-      - name: Build library and showcase
-        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
-        run: bun run build
-
-      - run: mkdir -p dist
-        if: inputs.snapshot == true || steps.release.outputs.skip != 'true'
-
-      - name: Pack Vue library
-        if: inputs.snapshot == true || steps.release.outputs.skip != 'true'
-        run: bun pm pack --ignore-scripts --destination ../../dist
-        working-directory: packages/teal-ink
-
-      - name: Archive showcase and create checksums
-        if: inputs.snapshot == true || steps.release.outputs.skip != 'true'
-        run: |
-          tar -czf dist/teal-ink-showcase.tar.gz -C examples/showcase dist
-          (cd dist && sha256sum *.tgz *.tar.gz > SHA256SUMS)
-
       - name: Publish Vue library to npm
-        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
+        if: steps.release.outputs.skip != 'true'
         env:
           NPM_DIST_TAG: ${{ steps.version.outputs.dist-tag }}
         run: |
@@ -126,20 +100,14 @@ jobs:
           if npm view "$package_name@$VERSION" version >/dev/null 2>&1; then
             echo "Package $package_name@$VERSION is already published; skipping."
           else
-            npm publish ./dist/*.tgz --access public --tag "$NPM_DIST_TAG"
+            bun run build:lib
+            npm publish ./packages/teal-ink --ignore-scripts --access public --tag "$NPM_DIST_TAG"
           fi
 
-      - name: Create or update GitHub release
-        if: inputs.snapshot != true && steps.release.outputs.skip != 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun scripts/create-github-release.js
-
-      - uses: actions/upload-artifact@v7
-        if: ${{ !cancelled() && inputs.snapshot == true }}
+      - name: Create the GitHub release
+        if: steps.release.outputs.skip != 'true'
+        uses: goreleaser/goreleaser-action@v7
         with:
-          name: release-snapshot
-          path: dist/*
-          compression-level: 0
-          retention-days: 7
-          if-no-files-found: error
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
