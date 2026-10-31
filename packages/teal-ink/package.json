@@ -1,6 +1,6 @@
 {
   "name": "@teal-ink/vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Teal Ink theme and Vue components, built on Naive UI",
   "repository": {
