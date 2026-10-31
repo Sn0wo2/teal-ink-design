@@ -43,9 +43,17 @@ function main() {
   if (tagExists) {
     git(['fetch', 'origin', defaultBranch])
     git(['checkout', '--detach', 'FETCH_HEAD'])
-    git(['cherry-pick', releaseSha])
-    push('origin', `HEAD:refs/heads/${defaultBranch}`)
-    console.log(`Cherry-picked the version bump for ${tag} onto ${defaultBranch}.`)
+    const picked = spawnSync('git', ['cherry-pick', releaseSha], { encoding: 'utf8' })
+    if (picked.status !== 0) {
+      if (!gitSucceeds(['diff', '--cached', '--quiet'])) {
+        throw new Error(`\`git cherry-pick ${releaseSha}\` failed: ${picked.stderr?.trim() || picked.stdout?.trim()}`)
+      }
+      git(['cherry-pick', '--skip'])
+      console.log(`Version bump for ${tag} is already on ${defaultBranch}; nothing to cherry-pick.`)
+    } else {
+      push('origin', `HEAD:refs/heads/${defaultBranch}`)
+      console.log(`Cherry-picked the version bump for ${tag} onto ${defaultBranch}.`)
+    }
   } else {
     git(['tag', tag])
     push('--atomic', 'origin', `HEAD:refs/heads/${defaultBranch}`, `refs/tags/${tag}`)
