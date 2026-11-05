@@ -1,0 +1,12 @@
+diff --git a/index.js b/index.js
+--- a/index.js
++++ b/index.js
+@@ -70,7 +70,7 @@ function run(tscPath) {
+         }
+     }
+ }
+-function resolveTscPath(tscPath = require.resolve('typescript/lib/tsc')) {
++function resolveTscPath(tscPath = require.resolve('@typescript/typescript6/lib/tsc')) {
+     try {
+         const { name } = require(path.join(tscPath, '..', '..', 'package.json'));
+         if (name === '@typescript/typescript6') {

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.5/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -65,7 +65,7 @@
           "level": "error",
           "options": {
             "style": "asNeeded",
-            "requireForObjectLiteral": false
+            "requireForObjectLiteral": true
           }
         },
         "useErrorCause": "error",
@@ -86,7 +86,6 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single",
       "semicolons": "asNeeded"
     }
   },

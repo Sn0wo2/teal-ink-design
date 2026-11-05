@@ -96,9 +96,9 @@ jobs:
 
       - uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: "chore(autofix): format and lint"
+          commit-message: "chore(autofix): formatting and lint"
           branch: auto-fix/teal-ink-${{ github.event.pull_request.number || github.ref_name }}
           delete-branch: true
-          title: "chore(autofix): format and lint"
-          body: "Automated lint fixes from CI"
+          title: "chore(autofix): formatting and lint"
+          body: "Automated Biome fixes from CI"
           labels: automated,teal-ink

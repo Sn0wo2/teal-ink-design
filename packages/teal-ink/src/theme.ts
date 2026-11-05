@@ -1,18 +1,18 @@
-import type { GlobalThemeOverrides } from 'naive-ui'
-import { foundations, type TiTheme, themes } from './tokens'
+import type { GlobalThemeOverrides } from "naive-ui"
+import { foundations, type TiTheme, themes } from "./tokens"
 
 export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
   return {
     common: {
       fontFamily: foundations.fontSans,
       fontFamilyMono: foundations.fontMono,
-      fontSize: '14px',
+      fontSize: "14px",
       lineHeight: foundations.lineHeightBody,
       borderRadius: foundations.radiusControl,
       borderRadiusSmall: foundations.radiusControl,
-      heightSmall: '30px',
+      heightSmall: "30px",
       heightMedium: foundations.controlHeight,
-      heightLarge: '44px',
+      heightLarge: "44px",
       primaryColor: themes[theme].accentText,
       primaryColorHover: themes[theme].accentText,
       primaryColorPressed: themes[theme].accentText,
@@ -85,7 +85,7 @@ export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
       boxShadow3: themes[theme].shadowFloating,
     },
     Button: {
-      fontWeight: '400',
+      fontWeight: "400",
       colorPrimary: themes[theme].accent,
       colorHoverPrimary: themes[theme].accentHover,
       colorPressedPrimary: themes[theme].accentPressed,
@@ -143,5 +143,5 @@ export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
   }
 }
 
-export const lightThemeOverrides = createThemeOverrides('light')
-export const darkThemeOverrides = createThemeOverrides('dark')
+export const lightThemeOverrides = createThemeOverrides("light")
+export const darkThemeOverrides = createThemeOverrides("dark")

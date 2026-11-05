@@ -7,7 +7,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 <template>
   <NVirtualList :item-size="36" style="height: 216px"
-    :items="Array.from({ length: 48 }, (_, index) => ({ key: index, label: t('examples.NVirtualList.row', { number: index + 1 }) }))"
+    :items="Array.from({ length: 48 }, (_, index) => { return { key: index, label: t('examples.NVirtualList.row', { number: index + 1 }) } })"
     :scrollbar-props="{ contentStyle: { padding: '4px 12px' } }">
     <template #default="{ item }">
       <NFlex class="row" align="center">

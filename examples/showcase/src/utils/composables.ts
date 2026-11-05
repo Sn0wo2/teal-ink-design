@@ -1,4 +1,4 @@
-import { computed, type Ref, ref, watch } from 'vue'
+import { computed, type Ref, ref, watch } from "vue"
 
 /** Creates a ref initialized from a translated value that re-syncs on locale change until the user edits it. */
 export function useTranslatedRef<T>(translate: () => T) {
@@ -23,20 +23,22 @@ export function useElementRef() {
     element,
     setElement(instance: unknown) {
       element.value =
-        instance && typeof instance === 'object' && '$el' in instance ? (instance.$el as HTMLElement) : null
+        instance && typeof instance === "object" && "$el" in instance ? (instance.$el as HTMLElement) : null
     },
   }
 }
 
 export function useTabButtonProps<T extends string>(selected: Ref<T>) {
-  return (name: T) => ({
-    role: 'button',
-    tabindex: 0,
-    'aria-pressed': selected.value === name,
-    onKeydown(event: KeyboardEvent) {
-      if (event.key !== 'Enter' && event.key !== ' ') return
-      event.preventDefault()
-      selected.value = name
-    },
-  })
+  return (name: T) => {
+    return {
+      role: "button",
+      tabindex: 0,
+      "aria-pressed": selected.value === name,
+      onKeydown(event: KeyboardEvent) {
+        if (event.key !== "Enter" && event.key !== " ") return
+        event.preventDefault()
+        selected.value = name
+      },
+    }
+  }
 }

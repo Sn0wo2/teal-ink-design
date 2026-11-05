@@ -65,13 +65,15 @@ const locationEvents = new AbortController()
 const { theme } = useTiTheme()
 const categoryOptions = computed(() => [
   { label: t('workshop.allCategories', { count: examples.length }), value: 'all' },
-  ...groups.map((group) => ({
-    label: t('workshop.groupCount', {
-      label: t(`workshop.groups.${group}`),
-      count: examples.filter((entry) => entry.group === group).length,
-    }),
-    value: group,
-  })),
+  ...groups.map((group) => {
+    return {
+      label: t('workshop.groupCount', {
+        label: t(`workshop.groups.${group}`),
+        count: examples.filter((entry) => entry.group === group).length,
+      }),
+      value: group,
+    }
+  }),
 ])
 const filteredEntries = computed(() => {
   const query = searchText.value.trim().toLocaleLowerCase(locale.value)
@@ -84,7 +86,9 @@ const menuOptions = computed(() => groups.map((group) => {
     type: 'group' as const,
     key: group,
     label: t('workshop.groupCount', { label: t(`workshop.groups.${group}`), count: entries.length }),
-    children: entries.map(({ name }) => ({ label: name, key: name })),
+    children: entries.map(({ name }) => {
+      return { label: name, key: name }
+    }),
   }
 }).filter((group) => group.children.length))
 const previewFrameSrc = computed(() => {
@@ -136,9 +140,9 @@ onBeforeUnmount(() => locationEvents.abort())
 </script>
 
 <template>
-  <NFlex id="components" vertical :size="24" class="workshop" role="region" aria-labelledby="workshop-title">
-    <NFlex vertical :size="10" class="workshop__intro">
-      <NFlex align="center" :size="8" class="workshop__eyebrow">
+  <NFlex id="components" vertical class="workshop" role="region" aria-labelledby="workshop-title">
+    <NFlex vertical class="workshop__intro">
+      <NFlex align="center" class="workshop__eyebrow">
         <span class="workshop__index" aria-hidden="true">02</span>
         <NText depth="3" class="overline">{{ t('workshop.overline') }}</NText>
       </NFlex>
@@ -151,18 +155,21 @@ onBeforeUnmount(() => locationEvents.abort())
           <NText depth="3" class="directory__title">{{ t('workshop.directory') }}</NText>
           <TiTag size="small" :round="false">{{ t('workshop.filteredCount', { filtered: filteredEntries.length, total: examples.length }) }}</TiTag>
         </header>
-        <NFlex vertical :size="16" class="directory__filters">
+        <NFlex vertical class="directory__filters">
           <TiInput id="component-search" v-model="searchText" :label="t('workshop.searchComponents')" :placeholder="t('workshop.nameOrCategory')" clearable class="directory__search" />
-          <NFormItem :label="t('workshop.exampleCategory')" :show-feedback="false">
-            <NSelect v-model:value="categoryFilter" :aria-label="t('workshop.exampleCategory')" :options="categoryOptions" />
-          </NFormItem>
-          <NFormItem :label="t('workshop.quickSelect')" :show-feedback="false" class="directory__mobile-picker">
-            <NSelect :value="selectedName" :aria-label="t('workshop.quickSelect')" :options="filteredEntries.map(({ name }) => ({ label: name, value: name }))" filterable @update:value="selectComponent" />
-          </NFormItem>
+          <div class="directory__selects">
+            <NFormItem :label="t('workshop.exampleCategory')" :show-feedback="false">
+              <NSelect v-model:value="categoryFilter" :aria-label="t('workshop.exampleCategory')" :options="categoryOptions" />
+            </NFormItem>
+            <NFormItem :label="t('workshop.quickSelect')" :show-feedback="false" class="directory__mobile-picker">
+              <NSelect :value="selectedName" :aria-label="t('workshop.quickSelect')" :options="filteredEntries.map(({ name }) => { return { label: name, value: name } })" filterable @update:value="selectComponent" />
+            </NFormItem>
+          </div>
           <NFlex v-if="filteredEntries.length" class="directory__list" :wrap="false" :aria-label="t('workshop.availableComponents')">
             <NScrollbar style="height: 360px">
               <NMenu :value="selectedName" :options="menuOptions" :indent="8" :root-indent="10"
-                :node-props="option => ({ tabindex: option.type === 'group' ? undefined : 0, 'data-component': String(option.key) })"
+                :aria-label="t('workshop.availableComponents')"
+                :node-props="option => { return { tabindex: option.type === 'group' ? undefined : 0, 'data-component': String(option.key) } }"
                 @update:value="selectComponent" @keydown="(event: KeyboardEvent) => {
                   if (event.key !== 'Enter' && event.key !== ' ') return
                    const name = (event.target as HTMLElement).getAttribute('data-component')
@@ -180,7 +187,7 @@ onBeforeUnmount(() => locationEvents.abort())
 
       <section class="stage" :aria-label="t('workshop.previewAndApi')">
         <header class="stage__header">
-          <NFlex vertical :size="4" class="stage__heading">
+          <NFlex vertical class="stage__heading">
             <NText depth="3" class="stage__group">{{ t(`workshop.groups.${selectedEntry.group}`) }}</NText>
             <NH3 class="stage__title">{{ selectedEntry.name }}</NH3>
           </NFlex>
@@ -199,7 +206,7 @@ onBeforeUnmount(() => locationEvents.abort())
             <NCode :code="selectedEntry.source" language="html" show-line-numbers class="stage__source stage__code" />
           </NTabPane>
           <NTabPane name="api" :tab="t('workshop.apiTab')" :tab-props="tabProps('api')">
-            <NFlex vertical :size="16" class="stage__api">
+            <NFlex vertical class="stage__api">
               <NText depth="3">{{ t('workshop.apiExplanation') }}</NText>
               <NDataTable v-if="propRows.length" :columns="[
                 { title: t('workshop.name'), key: 'name', width: 180 },
@@ -211,7 +218,7 @@ onBeforeUnmount(() => locationEvents.abort())
             </NFlex>
           </NTabPane>
           <NTabPane name="import" :tab="t('workshop.importTab')" :tab-props="tabProps('import')">
-            <NFlex vertical :size="16" class="stage__import">
+            <NFlex vertical class="stage__import">
               <NFlex justify="space-between" align="center" :wrap="true">
                 <NText strong>{{ t('workshop.onDemandImport') }}</NText>
                 <TiButton size="small" @click="copyToClipboard(importCode).then(success => { copyMessage = success ? 'copied' : 'copyFailed' })">{{ t('workshop.copyCode') }}</TiButton>
@@ -232,26 +239,31 @@ onBeforeUnmount(() => locationEvents.abort())
   width: 100%;
   min-width: 0;
   container-type: inline-size;
+  gap: var(--ti-space-8);
+  color: var(--ti-color-text);
+  font-family: var(--ti-font-sans);
+  overflow-wrap: anywhere;
 }
-.workshop__eyebrow { align-items: center; gap: 10px !important; }
+.workshop__intro { gap: var(--ti-space-3); }
+.workshop__eyebrow { align-items: center; gap: var(--ti-space-2); }
 .workshop__index {
   color: var(--ti-color-text-secondary);
-  font: 10px var(--ti-font-mono);
-  padding-right: 12px;
+  font: var(--ti-font-size-caption) var(--ti-font-mono);
+  padding-right: var(--ti-space-3);
   border-right: 1px solid var(--ti-color-border);
 }
 .workshop__intro :deep(.overline) {
   font-size: var(--ti-font-size-caption);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 .section-title {
   margin: 0;
-  font: 400 clamp(26px, 2.6vw, 34px) / 1.25 var(--ti-font-serif);
+  font: 400 var(--ti-font-size-heading) / var(--ti-line-height-heading) var(--ti-font-serif);
+  letter-spacing: -0.02em;
 }
 .workbench {
   display: grid;
-  grid-template-columns: minmax(220px, 0.76fr) minmax(0, 2.3fr);
+  grid-template-columns: minmax(220px, 0.28fr) minmax(0, 1fr);
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--ti-color-border);
@@ -268,36 +280,50 @@ onBeforeUnmount(() => locationEvents.abort())
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ti-space-2);
+  gap: var(--ti-space-3);
   padding-bottom: var(--ti-space-4);
   border-bottom: 1px solid var(--ti-color-border);
 }
 .directory__title {
-  font-size: var(--ti-font-size-caption);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  font-size: var(--ti-font-size-label);
+  font-weight: 500;
 }
-.directory__filters { padding-top: var(--ti-space-4); }
+.directory__filters {
+  gap: var(--ti-space-4);
+  padding-top: var(--ti-space-4);
+}
+.directory__selects {
+  display: grid;
+  min-width: 0;
+  gap: var(--ti-space-4);
+}
 .directory__filters :deep(.ti-input__label),
 .directory__filters :deep(.n-form-item-label) {
   color: var(--ti-color-text-secondary);
   font-size: var(--ti-font-size-caption);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
-.directory__filters :deep(.n-form-item) { margin-bottom: 0; }
+.directory__filters :deep(.n-form-item) { min-width: 0; margin-bottom: 0; }
+.directory__filters :deep(.n-form-item-label__text) { white-space: normal; }
 .directory__mobile-picker { display: none; }
 .directory__list { min-width: 0; }
-.directory__list :deep(.n-menu-item-content) { min-width: 0; }
+.directory__list :deep(.n-menu-item-content) {
+  min-width: 0;
+  min-height: 40px;
+}
 .directory__list :deep(.n-menu-item-content-header) {
   overflow: hidden;
   font-family: var(--ti-font-mono);
+  font-size: var(--ti-font-size-label);
   text-overflow: ellipsis;
+}
+.directory__list :deep(.n-menu-item-content--selected .n-menu-item-content-header) {
+  color: var(--ti-color-accent-text);
 }
 .directory__empty { padding-block: var(--ti-space-4); }
 .stage {
   min-width: 0;
-  padding: var(--ti-space-5);
+  padding: var(--ti-space-6);
   background: var(--ti-color-raised);
 }
 .stage__header {
@@ -309,27 +335,31 @@ onBeforeUnmount(() => locationEvents.abort())
   padding-bottom: var(--ti-space-4);
   border-bottom: 1px solid var(--ti-color-border);
 }
-.stage__heading { min-width: 0; }
+.stage__heading { min-width: 0; gap: var(--ti-space-1); }
 .stage__group {
   font-size: var(--ti-font-size-caption);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--ti-color-text-secondary);
 }
 .stage__title {
   overflow-wrap: anywhere;
   margin: 0;
-  font: 400 clamp(20px, 2vw, 26px) / 1.3 var(--ti-font-mono);
+  font: 500 var(--ti-font-size-heading) / var(--ti-line-height-heading) var(--ti-font-mono);
 }
-.stage__tabs { min-width: 0; margin-top: var(--ti-space-2); }
+.stage__tabs { min-width: 0; margin-top: var(--ti-space-3); }
 .stage__tabs :deep(.n-tabs-nav) { min-width: 0; }
 .stage__tabs :deep(.n-tab-pane) { min-width: 0; }
+.stage__tabs :deep(.n-tabs-tab) {
+  min-width: 0;
+  min-height: 44px;
+  font-size: var(--ti-font-size-label);
+}
 .stage__preview {
   display: flex;
   align-items: center;
   min-width: 0;
-  min-height: 320px;
+  min-height: 420px;
   overflow: auto;
-  padding: clamp(var(--ti-space-3), 3vw, var(--ti-space-6));
+  padding: var(--ti-space-8);
   border: 1px solid var(--ti-color-border);
   border-radius: var(--ti-radius-control);
   background: var(--ti-color-canvas);
@@ -337,9 +367,22 @@ onBeforeUnmount(() => locationEvents.abort())
 .stage__example { width: 100%; min-width: 0; }
 .stage__source,
 .stage__api,
-.stage__import { min-width: 0; padding-top: var(--ti-space-3); }
-.stage__code { max-width: 100%; max-height: 560px; overflow: auto; }
+.stage__import {
+  min-width: 0;
+  padding-top: var(--ti-space-4);
+}
+.stage__api { gap: var(--ti-space-4); }
+.stage__import { gap: var(--ti-space-4); }
+.stage__code {
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 560px;
+  overflow: auto;
+  font-size: var(--ti-font-size-caption);
+}
+.stage__api :deep(.n-data-table) { font-size: var(--ti-font-size-label); }
 .preview-frame {
+  display: block;
   width: 100%;
   min-width: 0;
   min-height: 520px;
@@ -347,25 +390,46 @@ onBeforeUnmount(() => locationEvents.abort())
   border-radius: var(--ti-radius-control);
   background: var(--ti-color-canvas);
 }
-@container (max-width: 760px) {
+@container (max-width: 800px) {
   .workbench { grid-template-columns: minmax(0, 1fr); }
   .directory {
     padding: var(--ti-space-4);
     border-right: 0;
     border-bottom: 1px solid var(--ti-color-border);
   }
+  .directory__selects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--ti-space-3);
+  }
   .directory__mobile-picker { display: block; }
   .directory__list { display: none !important; }
   .stage { padding: var(--ti-space-4); }
 }
 @media (max-width: 520px) {
-  .workshop { gap: var(--ti-space-4); }
+  .workshop { gap: var(--ti-space-5); }
   .workbench { border-radius: var(--ti-radius-control); }
-  .stage__header { align-items: flex-start; gap: var(--ti-space-2); }
+  .directory__selects { grid-template-columns: minmax(0, 1fr); }
+  .stage__header { align-items: flex-start; flex-direction: column; gap: var(--ti-space-3); }
+  .stage__heading { width: 100%; }
   .stage__header :deep(.n-button) { flex: none; }
-  .stage__title { font-size: 18px; }
-  .stage__preview { min-height: 280px; padding: var(--ti-space-3); }
+  .stage__preview { min-height: 320px; padding: var(--ti-space-3); }
   .preview-frame { min-height: 480px; }
   .stage__tabs :deep(.n-tabs-nav-scroll-content) { min-width: max-content; }
+}
+@media (pointer: coarse) {
+  .directory__filters :deep(.n-input),
+  .directory__filters :deep(.n-base-selection),
+  .directory__list :deep(.n-menu-item-content),
+  .stage__tabs :deep(.n-tabs-tab),
+  :deep(.n-button) {
+    min-height: 44px;
+  }
+  .stage__tabs :deep(.n-tabs-tab) { min-width: 44px; justify-content: center; }
+}
+.directory__list :deep(.n-menu-item-content:focus-visible),
+.stage__tabs :deep(.n-tabs-tab:focus-visible),
+:deep(.n-button:focus-visible) {
+  outline: 2px solid var(--ti-color-focus);
+  outline-offset: 2px;
 }
 </style>
