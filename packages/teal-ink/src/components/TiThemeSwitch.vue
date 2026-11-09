@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NButton, NTab, NTabs } from 'naive-ui'
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 import { useTiTheme } from '../context'
 import type { TiColorMode } from '../tokens'
 
@@ -10,7 +10,7 @@ defineProps<{
   icons: Record<TiColorMode, string>
 }>()
 const { mode, setMode } = useTiTheme()
-const control = ref<InstanceType<typeof NTabs>>()
+const control = useTemplateRef<InstanceType<typeof NTabs>>('control')
 const selected = ref(mode.value)
 let dragPointer: number | undefined
 let dragEvents: AbortController | undefined
@@ -81,7 +81,7 @@ function stopDrag(event?: Event) {
         :aria-pressed="selected === option"
         style="width: var(--ti-control-height); height: var(--ti-control-height); color: inherit"
       >
-        <span class="icon" aria-hidden="true" :style="{ '--ti-icon': `url(${icons[option]})` }" />
+        <span class="icon" aria-hidden="true" :style="{ '--ti-icon': `url(${JSON.stringify(icons[option])})` }" />
       </NButton>
     </NTab>
   </NTabs>

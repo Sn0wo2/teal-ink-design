@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<{
   global?: boolean
   locale: NLocale
   dateLocale: NDateLocale
+  styleMountTarget?: ParentNode | null
 }>(), {
   mode: 'light',
   global: false,
@@ -113,6 +114,7 @@ onBeforeUnmount(() => {
     :theme-overrides="theme === 'dark' ? darkThemeOverrides : lightThemeOverrides"
     :locale="props.locale"
     :date-locale="props.dateLocale"
+    :style-mount-target="props.styleMountTarget ?? null"
   >
     <NMessageProvider>
       <NDialogProvider>
@@ -152,6 +154,35 @@ onBeforeUnmount(() => {
   }
 }
 
+@supports (corner-shape: squircle) {
+  :is(.ti-provider, :root[data-ti-theme] body) :is(
+    .n-alert,
+    .n-auto-complete-menu,
+    .n-base-select-menu,
+    .n-base-selection,
+    .n-card,
+    .n-cascader-menu,
+    .n-color-picker,
+    .n-color-picker-panel,
+    .n-date-panel,
+    .n-dialog,
+    .n-dropdown-menu,
+    .n-input,
+    .n-mention-menu,
+    .n-message,
+    .n-notification,
+    .n-popover,
+    .n-popselect-menu,
+    .n-time-picker-panel,
+    .n-tree-select-menu,
+    .n-upload-dragger
+  ) {
+    corner-shape: var(--ti-corner-shape);
+  }
+
+  :is(.ti-provider, :root[data-ti-theme] body) .n-input--round { corner-shape: round; }
+}
+
 :is(:root[data-ti-transition], .ti-provider[data-ti-changing]) {
   *, *::before, *::after { transition: none !important; }
 }
@@ -178,12 +209,30 @@ onBeforeUnmount(() => {
 @media (pointer: coarse) {
   .ti-provider { --ti-control-height: 44px !important; }
   .ti-provider :is(.n-button, .n-input, .n-base-selection) { min-height: var(--ti-control-height); }
+  .ti-provider :is(.n-tag--closable, .n-base-close, .n-base-clear, .n-base-clear__clear, .n-input__input-el, .n-checkbox, .n-radio, .n-tabs-tab) {
+    min-height: var(--ti-control-height);
+  }
+  .ti-provider :is(.n-base-close, .n-base-clear, .n-base-clear__clear, .n-checkbox, .n-radio, .n-tabs-tab) { min-width: var(--ti-control-height); }
+  .ti-provider .n-base-clear__clear {
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%) !important;
+  }
+  .ti-provider .n-tag--round.n-tag--closable { border-radius: var(--ti-radius-pill); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ti-provider {
+  :is(:root[data-ti-theme], .ti-provider) {
     --ti-motion-duration: 0ms !important;
     --ti-motion-theme-duration: 0ms !important;
+
+    *, &::before, &::after, & {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+    .n-base-clear__clear { transform: translate(-50%, -50%) !important; }
   }
 
   :root[data-ti-transition]::view-transition-new(root) { animation: none; }

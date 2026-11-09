@@ -29,6 +29,7 @@ export const foundations = {
   radiusSwatch: "12px",
   radiusDisplay: "18px",
   radiusPill: "999px",
+  cornerShape: "squircle",
   controlHeight: "36px",
   motionDuration: "160ms",
   motionThemeDuration: "360ms",
@@ -93,16 +94,12 @@ export const themes = {
 } as const
 
 export function createCssVariables(theme: TiTheme): Record<`--ti-${string}`, string> {
+  const kebab = (key: string) => key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)
   return Object.fromEntries([
     ...Object.entries(palette).map(([key, value]) => [`--ti-palette-${key}`, value]),
-    ...Object.entries(foundations).map(([key, value]) => [
-      `--ti-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`,
-      value,
-    ]),
+    ...Object.entries(foundations).map(([key, value]) => [`--ti-${kebab(key)}`, value]),
     ...Object.entries(themes[theme]).map(([key, value]) => [
-      key === "shadowFloating"
-        ? "--ti-shadow-floating"
-        : `--ti-color-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`,
+      `--ti-${key === "shadowFloating" ? "shadow-floating" : `color-${kebab(key)}`}`,
       value,
     ]),
     ...[1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24].map((step) => [`--ti-space-${step}`, `${step * 4}px`]),
