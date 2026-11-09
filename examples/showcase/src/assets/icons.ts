@@ -1,5 +1,5 @@
-export const themeIcons = {
-  light: new URL(`${import.meta.env.BASE_URL}icons/theme-light.svg`, document.baseURI).href,
-  dark: new URL(`${import.meta.env.BASE_URL}icons/theme-dark.svg`, document.baseURI).href,
-  system: new URL(`${import.meta.env.BASE_URL}icons/theme-system.svg`, document.baseURI).href,
-}
+import dark from "@teal-ink/vue/icons/theme-dark.svg?url"
+import light from "@teal-ink/vue/icons/theme-light.svg?url"
+import system from "@teal-ink/vue/icons/theme-system.svg?url"
+
+export const themeIcons = { light, dark, system }
