@@ -69,27 +69,10 @@ body {
   mask: var(--icon) center / contain no-repeat;
   -webkit-mask: var(--icon) center / contain no-repeat;
 }
-.overline {
-  font-size: var(--ti-font-size-label);
-  letter-spacing: 0.06em;
-}
-.section-title {
-  margin: 0;
-  font: 400 clamp(26px, 3vw, 36px) / 1.5 var(--ti-font-serif);
-}
 
 @media (max-width: 700px) {
   html {
     scroll-padding-top: 130px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .n-marquee * {
-    animation: none !important;
   }
 }
 </style>

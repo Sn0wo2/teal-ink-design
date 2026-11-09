@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "青墨 Teal Ink: Vue 3 主题与组件库",
-    "description": "基于 Vue 3 与 Naive UI 的组件库, 提供统一主题与明暗模式, 使用青绿主色和鼠尾草绿次色"
+    "description": "基于 Vue 3 与 Naive UI 的主题与组件库, 明暗主题共用一套设计, 也能通过 Web Components 用在 HTML 和其他框架里"
   },
   "showcase": {
     "brand": "青墨",
@@ -22,20 +22,20 @@
     "dark": "深色",
     "system": "跟随系统",
     "heroOverline": "青墨 · Vue 3 主题与组件",
-    "heroTitle": "留一点白，",
-    "heroAccent": "让内容说话。",
-    "heroDescription": "以暖纸为底，青绿为引。基于 Vue 3 与 Naive UI 的主题与组件，让界面清疏，让阅读从容。",
+    "heroTitle": "留一点白,",
+    "heroAccent": "让内容说话",
+    "heroDescription": "暖纸做底, 青绿点睛. 基于 Vue 3 与 Naive UI 的主题与组件, 界面清爽, 阅读不累",
     "explore": "浏览组件",
     "meet": "了解设计语言",
-    "livePreview": "可操作的界面样本",
+    "livePreview": "能直接操作的界面示例",
     "previewTitle": "青墨手记",
     "previewPath": "交互预览",
     "previewGreeting": "今天的一点进展",
     "paletteTitle": "有分寸的颜色与排版",
-    "paletteLead": "中性色承载内容，青绿强调重要行动。层次来自比例、间距与留白，而不是装饰。",
+    "paletteLead": "中性色承载内容, 青绿突出主要操作. 层次靠比例, 间距和留白, 不靠装饰",
     "paletteLabel": "底色与强调色",
-    "primaryRole": "青绿标记主要操作与关键强调",
-    "secondaryRole": "鼠尾草绿用于辅助强调，不代替状态语义",
+    "primaryRole": "青绿用于主要操作和关键强调",
+    "secondaryRole": "鼠尾草绿负责辅助强调, 不拿来当状态色",
     "primaryLabel": "主色",
     "secondaryLabel": "次色",
     "colors": {
@@ -47,20 +47,20 @@
       "primary": "青绿",
       "secondary": "鼠尾草绿"
     },
-    "copyColor": "复制{color}色值 {hex}",
-    "paletteHint": "点击色板复制 HEX",
-    "paletteNote": "色板保留固定色值；实际界面使用随明暗模式变化的语义 token。",
+    "copyColor": "复制 {color} 色值 {hex}",
+    "paletteHint": "点击色板, 复制 HEX",
+    "paletteNote": "色板保持固定色值, 界面实际使用随明暗模式变化的语义变量",
     "typography": "文字与留白",
-    "typeHint": "三种字体，各司其职",
+    "typeHint": "三种字体, 分工明确",
     "typeHeading": "标题 · 衬线",
     "typeBody": "正文 · 无衬线",
     "typeCode": "代码 · 等宽",
-    "typeSerifSample": "字里行间，自有余地。",
-    "typeBodySample": "让标题引路，让正文安静地承载信息。清晰，比装饰更重要。",
+    "typeSerifSample": "字里行间, 自有余地",
+    "typeBodySample": "标题引路, 正文承载信息, 清晰比装饰更重要",
     "spacingUnit": "间距基准",
     "bodyRhythm": "正文行高",
     "note": "一页笔记",
-    "initialNote": "让重要的信息先被看见，再给细节留一点空间。",
+    "initialNote": "重要信息放前面, 细节留一点空间",
     "saved": "已保存",
     "unsaved": "有修改",
     "notePlaceholder": "写一条笔记",
@@ -72,11 +72,20 @@
     "taskFocus": "搭建页面",
     "taskPolish": "检查细节",
     "focus": "隐藏已完成",
-    "allDone": "都完成了，给自己留一点空白。",
+    "allDone": "都完成了, 给自己留一点空白",
     "startOverline": "开始使用",
-    "startTitle": "从一层主题，\n开始你的界面。",
-    "startDescription": "先在仓库根目录构建组件库，再引入样式，用 TiProvider 为应用配置青墨主题。",
-    "providerNote": "支持局部主题、系统外观与手动切换。不必重写已有的 Naive UI 组件。",
+    "startTitle": "套上一层主题,\n界面从这里开始",
+    "startDescription": "先在仓库根目录构建组件库, 引入样式, 再用 TiProvider 给应用套上青墨主题",
+    "providerNote": "支持局部主题, 跟随系统和手动切换; 已有的 Naive UI 组件不用重写",
+    "ecosystems": {
+      "link": "Vue 原生, 其他框架走 Web Components",
+      "title": "一套设计, 两种接法",
+      "description": "Vue 和跨框架两种接法, 共用同一套组件实现, 设计 token 和明暗主题; 本站只展示 Vue 示例",
+      "vueLabel": "原生组件",
+      "vueDescription": "直接用 Vue 3 和 Naive UI, 不经过 Web Components",
+      "elementsDescription": "用浏览器标准的自定义元素接入: 基础 ti-* 标签拿来就用, 完整组件可以通过可选的 ti-component 宿主来组合, 内部复用的是 Vue 运行时和组件",
+      "verification": "HTML 和 jQuery 在浏览器里验证过; React, Svelte, Angular 按自定义元素标准接入, 还没逐一验证"
+    },
     "workspaceSetup": "在此工作区中使用",
     "hello": "你好, 青墨",
     "copyCommand": "复制构建命令",
@@ -85,7 +94,7 @@
     "copy": "复制",
     "copyError": "复制失败, 请手动选择内容复制",
     "top": "回到顶部",
-    "footerNote": "精致来自排版、比例与留白。"
+    "footerNote": "精致来自排版, 比例和留白"
   },
   "workshop": {
     "groups": {
@@ -99,7 +108,7 @@
     "groupCount": "{label} / {count}",
     "filteredCount": "显示 {filtered} / {total}",
     "overline": "组件示例",
-    "heading": "把组件，放进你的界面。",
+    "heading": "把组件放进你的界面",
     "directory": "组件目录",
     "directoryAndFilters": "组件目录与筛选",
     "searchComponents": "搜索组件",
@@ -116,7 +125,7 @@
     "sourceTab": "示例源码",
     "apiTab": "接口",
     "apiExplanation": "仅展示运行时属性, 不含完整 TypeScript 类型",
-    "noRuntimeProps": "无运行时属性",
+    "noRuntimeProps": "没有运行时属性",
     "importTab": "导入",
     "name": "名称",
     "category": "分类",
@@ -128,7 +137,7 @@
     "unknownType": "未知",
     "onDemandImport": "按需引入",
     "copyCode": "复制代码",
-    "providerExplanation": "用 TiProvider 包裹应用以启用主题",
+    "providerExplanation": "用 TiProvider 包住应用, 主题就会生效",
     "copied": "已复制到剪贴板",
     "copyFailed": "复制失败, 请选中代码后手动复制"
   },
@@ -371,7 +380,7 @@
     },
     "NGlobalStyle": {
       "title": "Naive UI 全局基础样式",
-      "description": "此预览挂载 NGlobalStyle, 可查看全局重置样式的效果",
+      "description": "这个预览挂载了 NGlobalStyle, 可以看到全局重置样式的效果",
       "status": "全局样式已挂载"
     },
     "NImagePreview": {
@@ -386,7 +395,7 @@
     },
     "NPopconfirm": {
       "archived": "笔记已归档",
-      "prompt": "点击按钮, 试用确认弹层",
+      "prompt": "点击按钮试试确认弹层",
       "archive": "归档",
       "cancel": "取消",
       "button": "归档笔记",
@@ -411,8 +420,8 @@
     "NResult": {
       "connected": "加载成功",
       "unavailable": "页面暂不可用",
-      "restored": "当前展示操作成功的结果样式",
-      "expired": "当前展示页面缺失时的结果样式",
+      "restored": "这是操作成功时的结果样式",
+      "expired": "这是页面缺失时的结果样式",
       "empty": "查看缺失状态",
       "reload": "查看成功状态"
     },
@@ -441,7 +450,7 @@
     },
     "DialogProviderActions": {
       "infoTitle": "提示",
-      "infoContent": "此对话框通过 useDialog 打开",
+      "infoContent": "这个对话框通过 useDialog 打开",
       "understood": "知道了",
       "archiveTitle": "归档这篇笔记?",
       "archiveContent": "这是确认对话框示例, 不会修改实际内容",

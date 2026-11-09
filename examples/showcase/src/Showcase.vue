@@ -110,6 +110,7 @@ function saveNote() {
             <a href="#language" class="text-link">{{ t('showcase.meet') }}<span aria-hidden="true">↗</span></a>
           </div>
           <ul class="hero-stack" aria-label="Vue 3, TypeScript, Naive UI"><li>Vue 3</li><li>TypeScript</li><li>Naive UI</li></ul>
+          <a href="#ecosystems" class="text-link ecosystem-link">{{ t('showcase.ecosystems.link') }}<span aria-hidden="true">↗</span></a>
         </div>
 
         <div class="interface-specimen">
@@ -225,6 +226,25 @@ function saveNote() {
           <div class="install-command"><code><span class="muted" aria-hidden="true">$</span> bun run build:lib</code><TiButton variant="text" size="small" :aria-label="t(copied ? 'showcase.copyAgain' : 'showcase.copyCommand')" @click="copy('bun run build:lib')">{{ t(copied ? 'showcase.copied' : 'showcase.copy') }}</TiButton></div>
           <NCode :code="usage" language="html" class="usage-code" />
         </div>
+        <section id="ecosystems" class="ecosystems" aria-labelledby="ecosystems-title">
+          <div class="ecosystems-copy">
+            <h3 id="ecosystems-title">{{ t('showcase.ecosystems.title') }}</h3>
+            <p>{{ t('showcase.ecosystems.description') }}</p>
+          </div>
+          <div>
+            <dl class="ecosystem-routes">
+              <div>
+                <dt><span>Vue 3</span><span class="ecosystem-kind">{{ t('showcase.ecosystems.vueLabel') }}</span></dt>
+                <dd><code>@teal-ink/vue</code><p>{{ t('showcase.ecosystems.vueDescription') }}</p></dd>
+              </div>
+              <div>
+                <dt><span>HTML · jQuery · React · Svelte · Angular</span><span class="ecosystem-kind">Web Components</span></dt>
+                <dd><code>@teal-ink/elements</code><p>{{ t('showcase.ecosystems.elementsDescription') }}</p></dd>
+              </div>
+            </dl>
+            <p class="ecosystem-note">{{ t('showcase.ecosystems.verification') }}</p>
+          </div>
+        </section>
       </section>
     </main>
     <footer class="site-footer"><div class="footer-brand"><TiLogo :size="24" /><span>{{ t('showcase.brand') }}</span></div><p>{{ t('showcase.footerNote') }}</p><a href="#top" class="footer-top">{{ t('showcase.top') }}<span aria-hidden="true">↑</span></a></footer>
@@ -265,10 +285,11 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .text-link { display: inline-flex; align-items: center; gap: var(--ti-space-3); min-height: var(--ti-control-height); }
 .hero-stack { display: flex; flex-wrap: wrap; gap: var(--ti-space-4); padding: 0; margin: var(--ti-space-8) 0 0; list-style: none; color: var(--ti-color-text-secondary); font: var(--ti-font-size-caption) / var(--ti-line-height-control) var(--ti-font-mono); }
 .hero-stack li + li { padding-left: var(--ti-space-4); border-left: 1px solid var(--ti-color-border); }
+.ecosystem-link { margin-top: var(--ti-space-2); color: var(--ti-color-text-secondary); font-size: var(--ti-font-size-label); }
 .interface-specimen { min-width: 0; }
 .specimen-caption { justify-content: space-between; flex-wrap: wrap; gap: var(--ti-space-2); margin-bottom: var(--ti-space-3); color: var(--ti-color-text-secondary); font-size: var(--ti-font-size-label); }
 .specimen-caption code { font: var(--ti-font-size-caption) / var(--ti-line-height-control) var(--ti-font-mono); }
-.workspace-preview { overflow: hidden; border: 1px solid var(--ti-color-border); border-radius: var(--ti-radius-display); background: var(--ti-color-raised); }
+.workspace-preview { overflow: hidden; border: 1px solid var(--ti-color-border); border-radius: var(--ti-radius-display); corner-shape: var(--ti-corner-shape); background: var(--ti-color-raised); }
 .workspace-toolbar { justify-content: space-between; gap: var(--ti-space-3); padding: var(--ti-space-4) var(--ti-space-6); border-bottom: 1px solid var(--ti-color-border); font-size: var(--ti-font-size-label); }
 .workspace-identity { min-width: 0; }
 .workspace-identity :deep(svg) { flex: none; }
@@ -334,6 +355,17 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .install-command code { font: var(--ti-font-size-label) / var(--ti-line-height-body) var(--ti-font-mono); }
 .install-command code .muted { margin-right: var(--ti-space-2); }
 .usage-code { display: block; max-width: 100%; padding: var(--ti-space-5); overflow: auto; font-size: var(--ti-font-size-label); line-height: var(--ti-line-height-body); }
+.ecosystems { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: var(--ti-space-12); padding-top: var(--ti-space-8); border-top: 1px solid var(--ti-color-border-subtle); }
+.ecosystems-copy h3 { font: 400 var(--ti-font-size-heading) / var(--ti-line-height-heading) var(--ti-font-serif); }
+.ecosystems-copy p { margin-top: var(--ti-space-4); color: var(--ti-color-text-secondary); line-height: var(--ti-line-height-body); }
+.ecosystem-routes { margin: 0; }
+.ecosystem-routes > div + div { margin-top: var(--ti-space-6); padding-top: var(--ti-space-6); border-top: 1px solid var(--ti-color-border-subtle); }
+.ecosystem-routes dt { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--ti-space-2) var(--ti-space-4); }
+.ecosystem-kind { color: var(--ti-color-text-secondary); font-size: var(--ti-font-size-label); }
+.ecosystem-routes dd { margin: var(--ti-space-2) 0 0; }
+.ecosystem-routes code { font: var(--ti-font-size-label) / var(--ti-line-height-body) var(--ti-font-mono); }
+.ecosystem-routes dd p { margin-top: var(--ti-space-2); color: var(--ti-color-text-secondary); line-height: var(--ti-line-height-body); }
+.ecosystem-note { margin-top: var(--ti-space-5); color: var(--ti-color-text-secondary); font-size: var(--ti-font-size-label); }
 .site-footer { justify-content: space-between; flex-wrap: wrap; gap: var(--ti-space-6); padding-block: var(--ti-space-6); border-top: 1px solid var(--ti-color-border); }
 .footer-brand { font: 400 1rem / var(--ti-line-height-heading) var(--ti-font-serif); }
 .site-footer > p { color: var(--ti-color-text-secondary); font-size: var(--ti-font-size-label); }
@@ -358,7 +390,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .interface-specimen { width: 100%; max-width: 620px; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: var(--ti-space-4); margin-bottom: var(--ti-space-8); }
   .section-description { max-width: 36em; }
-  .foundations-grid, .start-section { grid-template-columns: minmax(0, 1fr); gap: var(--ti-space-8); }
+  .foundations-grid, .start-section, .ecosystems { grid-template-columns: minmax(0, 1fr); gap: var(--ti-space-8); }
   .type-sheet { padding: var(--ti-space-6) 0 0; border-top: 1px solid var(--ti-color-border); border-left: 0; }
   .accent-tokens { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ti-space-5); }
   .accent-token + .accent-token { border-top: 1px solid var(--ti-color-border-subtle); }

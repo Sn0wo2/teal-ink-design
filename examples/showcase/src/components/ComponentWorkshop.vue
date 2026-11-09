@@ -142,7 +142,7 @@ onBeforeUnmount(() => locationEvents.abort())
 <template>
   <NFlex id="components" vertical class="workshop" role="region" aria-labelledby="workshop-title">
     <NFlex vertical class="workshop__intro">
-      <NFlex align="center" class="workshop__eyebrow">
+      <NFlex align="center">
         <span class="workshop__index" aria-hidden="true">02</span>
         <NText depth="3" class="overline">{{ t('workshop.overline') }}</NText>
       </NFlex>
@@ -156,7 +156,7 @@ onBeforeUnmount(() => locationEvents.abort())
           <TiTag size="small" :round="false">{{ t('workshop.filteredCount', { filtered: filteredEntries.length, total: examples.length }) }}</TiTag>
         </header>
         <NFlex vertical class="directory__filters">
-          <TiInput id="component-search" v-model="searchText" :label="t('workshop.searchComponents')" :placeholder="t('workshop.nameOrCategory')" clearable class="directory__search" />
+          <TiInput id="component-search" v-model="searchText" :label="t('workshop.searchComponents')" :placeholder="t('workshop.nameOrCategory')" clearable />
           <div class="directory__selects">
             <NFormItem :label="t('workshop.exampleCategory')" :show-feedback="false">
               <NSelect v-model:value="categoryFilter" :aria-label="t('workshop.exampleCategory')" :options="categoryOptions" />
@@ -239,13 +239,10 @@ onBeforeUnmount(() => locationEvents.abort())
   width: 100%;
   min-width: 0;
   container-type: inline-size;
-  gap: var(--ti-space-8);
   color: var(--ti-color-text);
   font-family: var(--ti-font-sans);
   overflow-wrap: anywhere;
 }
-.workshop__intro { gap: var(--ti-space-3); }
-.workshop__eyebrow { align-items: center; gap: var(--ti-space-2); }
 .workshop__index {
   color: var(--ti-color-text-secondary);
   font: var(--ti-font-size-caption) var(--ti-font-mono);
@@ -268,6 +265,7 @@ onBeforeUnmount(() => locationEvents.abort())
   overflow: hidden;
   border: 1px solid var(--ti-color-border);
   border-radius: var(--ti-radius-display);
+  corner-shape: var(--ti-corner-shape);
   background: var(--ti-color-raised);
 }
 .directory {
@@ -289,7 +287,6 @@ onBeforeUnmount(() => locationEvents.abort())
   font-weight: 500;
 }
 .directory__filters {
-  gap: var(--ti-space-4);
   padding-top: var(--ti-space-4);
 }
 .directory__selects {
@@ -335,7 +332,7 @@ onBeforeUnmount(() => locationEvents.abort())
   padding-bottom: var(--ti-space-4);
   border-bottom: 1px solid var(--ti-color-border);
 }
-.stage__heading { min-width: 0; gap: var(--ti-space-1); }
+.stage__heading { min-width: 0; }
 .stage__group {
   font-size: var(--ti-font-size-caption);
   color: var(--ti-color-text-secondary);
@@ -371,8 +368,6 @@ onBeforeUnmount(() => locationEvents.abort())
   min-width: 0;
   padding-top: var(--ti-space-4);
 }
-.stage__api { gap: var(--ti-space-4); }
-.stage__import { gap: var(--ti-space-4); }
 .stage__code {
   box-sizing: border-box;
   max-width: 100%;

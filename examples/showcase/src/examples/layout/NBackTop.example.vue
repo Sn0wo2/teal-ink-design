@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { NBackTop, NFlex, NP, NText, TiCard } from '@teal-ink/vue'
+import { computed, useTemplateRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useElementRef } from '../../utils/composables'
 
 const { t } = useI18n({ useScope: 'global' })
-const { element: target, setElement } = useElementRef()
+const card = useTemplateRef<InstanceType<typeof TiCard>>('card')
+const target = computed(() => card.value?.$el as HTMLElement | undefined)
 </script>
 
 <template>
-  <TiCard size="small" :ref="setElement" class="back-top-target">
+  <TiCard ref="card" size="small" class="back-top-target">
     <NFlex vertical :size="16" class="back-top-content">
       <NText strong>{{ t('examples.NBackTop.title') }}</NText>
       <NP>{{ t('examples.NBackTop.instruction') }}</NP>

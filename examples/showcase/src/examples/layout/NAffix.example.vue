@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { NAffix, NButton, NFlex, NP, TiCard } from '@teal-ink/vue'
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useElementRef } from '../../utils/composables'
 
 const { t } = useI18n({ useScope: 'global' })
-const { element, setElement } = useElementRef()
+const card = useTemplateRef<InstanceType<typeof TiCard>>('card')
 const target = computed(() => {
-  const current = element.value
-  return current ? () => current : undefined
+  const element = card.value?.$el as HTMLElement | undefined
+  return element ? () => element : undefined
 })
 </script>
 
 <template>
-  <TiCard size="small" :ref="setElement" class="affix-target">
+  <TiCard ref="card" size="small" class="affix-target">
     <NFlex vertical :size="16" class="affix-content">
       <NP>{{ t('examples.NAffix.instruction') }}</NP>
       <NAffix v-if="target" position="absolute" :top="12" :target="target" :listen-to="target">

@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Teal Ink: Vue 3 themes and components",
-    "description": "A Vue 3 component library built on Naive UI, with shared themes, light and dark modes, and teal and sage accents."
+    "description": "Vue 3 themes and components built on Naive UI, with Web Components for HTML, jQuery, and other frameworks. One Teal Ink design, in light and dark."
   },
   "showcase": {
     "brand": "Teal Ink",
@@ -77,6 +77,15 @@
     "startTitle": "One theme.\nYour next interface.",
     "startDescription": "Build the library from the repository root, import its CSS, and wrap your app in TiProvider.",
     "providerNote": "Use local themes, system appearance, or manual switching. Keep the Naive UI components you already use.",
+    "ecosystems": {
+      "link": "Native Vue, Web Components for other ecosystems",
+      "title": "One design. Two ways in.",
+      "description": "Native Vue and cross-framework integration share the same components, design tokens, and light and dark themes. All examples here use Vue.",
+      "vueLabel": "Native components",
+      "vueDescription": "Use Vue 3 and Naive UI directly, without Web Components.",
+      "elementsDescription": "Integrate through browser-standard custom elements. Use the basic ti-* tags directly, or compose the full component set with the optional ti-component host. Both reuse the Vue runtime and components.",
+      "verification": "HTML / jQuery have been checked in a browser. React, Svelte, and Angular can integrate through custom elements, but have not been individually verified."
+    },
     "workspaceSetup": "Inside this workspace",
     "hello": "Hello, Teal Ink",
     "copyCommand": "Copy build command",
