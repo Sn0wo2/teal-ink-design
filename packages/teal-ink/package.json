@@ -2,7 +2,17 @@
   "name": "@teal-ink/vue",
   "version": "0.1.1",
   "type": "module",
-  "description": "Teal Ink theme and Vue components, built on Naive UI",
+  "description": "Style your Vue 3 app with the Teal Ink theme and components, built on Naive UI",
+  "keywords": [
+    "vue",
+    "vue3",
+    "naive-ui",
+    "theme",
+    "design-system",
+    "ui-components",
+    "dark-mode",
+    "teal-ink"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sn0wo2/teal-ink-design.git",
@@ -27,7 +37,8 @@
     },
     "./style.css": {
       "default": "./dist/style.css"
-    }
+    },
+    "./icons/*": "./src/icons/*"
   },
   "scripts": {
     "build": "vite build && vue-tsc -p tsconfig.build.json",
