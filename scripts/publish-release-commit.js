@@ -21,13 +21,15 @@ function main() {
   const version = process.env.VERSION
   const tag = `v${version}`
   const defaultBranch = process.env.DEFAULT_BRANCH
-  const packageDir = process.env.PACKAGE_DIR ?? "."
-  const manifest = packageDir === "." ? "package.json" : `${packageDir}/package.json`
+  const packageDirs = [process.env.PACKAGE_DIR ?? ".", process.env.ELEMENTS_PACKAGE_DIR].filter(Boolean)
+  const manifests = packageDirs.map((packageDir) =>
+    packageDir === "." ? "package.json" : `${packageDir}/package.json`,
+  )
   const push = (...command) => git(["-c", "credential.helper=!gh auth git-credential", "push", ...command])
 
   git(["config", "user.name", "github-actions[bot]"])
   git(["config", "user.email", "github-actions[bot]@users.noreply.github.com"])
-  git(["add", "-u", "--", manifest, "bun.lock"])
+  git(["add", "-u", "--", ...manifests, "bun.lock"])
 
   const tagExists = gitSucceeds(["show-ref", "--verify", "--quiet", `refs/tags/${tag}`])
   const staged = !gitSucceeds(["diff", "--cached", "--quiet"])

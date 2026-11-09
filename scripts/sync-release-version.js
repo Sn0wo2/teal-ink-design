@@ -13,13 +13,22 @@ function main() {
     if (!process.env[name]) throw new Error(`${name} is not set`)
   }
 
-  const packageDir = process.env.PACKAGE_DIR ?? "."
-  const manifest = packageDir === "." ? "package.json" : `${packageDir}/package.json`
+  const packageDirs = [process.env.PACKAGE_DIR ?? ".", process.env.ELEMENTS_PACKAGE_DIR].filter(Boolean)
+  const manifests = packageDirs.map((packageDir) =>
+    packageDir === "." ? "package.json" : `${packageDir}/package.json`,
+  )
 
-  run(["npm", "pkg", "set", `version=${process.env.VERSION}`], { cwd: packageDir })
+  for (const packageDir of packageDirs) {
+    run(["npm", "pkg", "set", `version=${process.env.VERSION}`], { cwd: packageDir })
+  }
+  if (process.env.ELEMENTS_PACKAGE_DIR) {
+    run(["npm", "pkg", "set", `dependencies.@teal-ink/vue=${process.env.VERSION}`], {
+      cwd: process.env.ELEMENTS_PACKAGE_DIR,
+    })
+  }
   run(["bun", "install"])
 
-  const changed = spawnSync("git", ["diff", "--quiet", "--", manifest, "bun.lock"]).status !== 0
+  const changed = spawnSync("git", ["diff", "--quiet", "--", ...manifests, "bun.lock"]).status !== 0
   if (changed) appendFileSync(process.env.GITHUB_OUTPUT, "changed=true\n")
   console.log(
     changed ? `Package version synced to ${process.env.VERSION}.` : `Package version already ${process.env.VERSION}.`,
