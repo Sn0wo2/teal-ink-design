@@ -119,6 +119,7 @@ export function renderControl(
         names.filter((name) => assigned.value.has(name)).map((name) => [name, () => h("slot", { name })]),
       ),
     }
+    const content = () => h(component, componentProps, slots)
     return h(
       TiProvider,
       {
@@ -138,11 +139,9 @@ export function renderControl(
                     theme.setMode = (value, trigger) => context.value.setMode(value, trigger)
                   },
                 },
-                {
-                  default: () => h(component, componentProps, slots),
-                },
+                { default: content },
               )
-            : h(component, componentProps, slots),
+            : content(),
       },
     )
   }

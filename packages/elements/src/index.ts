@@ -124,7 +124,7 @@ export class TiButtonElement extends defineCustomElement(
               queueMicrotask(() => {
                 const form = state?.internals.form
                 if (!form || event.defaultPrevented || props.disabled || props.loading || state?.disabled.value) return
-                if (props.type === "reset") HTMLFormElement.prototype.reset.call(form)
+                if (props.type === "reset") form.reset()
                 if (props.type === "submit") {
                   const submitter = document.createElement("button")
                   submitter.type = "submit"
@@ -137,7 +137,7 @@ export class TiButtonElement extends defineCustomElement(
                   }
                   form.append(submitter)
                   try {
-                    HTMLFormElement.prototype.requestSubmit.call(form, submitter)
+                    form.requestSubmit(submitter)
                   } finally {
                     submitter.remove()
                   }
@@ -303,7 +303,7 @@ export class TiInputElement extends defineCustomElement(
                 ].includes(field.type),
           ).length === 1
         ) {
-          HTMLFormElement.prototype.requestSubmit.call(form)
+          form.requestSubmit()
         }
       })
     })
