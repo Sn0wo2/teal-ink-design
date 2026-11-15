@@ -23,7 +23,6 @@ import {
 import { type Component, computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { copyToClipboard } from '../utils/clipboard'
-import { useTabButtonProps } from '../utils/composables'
 
 const groups = ['teal', 'inputs', 'display', 'feedback', 'layout'] as const
 const exampleSuffix = /\.example\.vue$/
@@ -58,7 +57,18 @@ const selectedEntry = computed(() => {
 const searchText = ref('')
 const categoryFilter = ref('all')
 const activeTab = ref<'preview' | 'source' | 'api' | 'import'>('preview')
-const tabProps = useTabButtonProps(activeTab)
+const tabProps = (name: typeof activeTab.value) => {
+  return {
+    role: 'button',
+    tabindex: 0,
+    'aria-pressed': activeTab.value === name,
+    onKeydown(event: KeyboardEvent) {
+      if (event.key !== 'Enter' && event.key !== ' ') return
+      event.preventDefault()
+      activeTab.value = name
+    },
+  }
+}
 const resetKey = ref(0)
 const copyMessage = ref<'copied' | 'copyFailed' | ''>('')
 const locationEvents = new AbortController()
