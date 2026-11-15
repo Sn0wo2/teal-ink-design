@@ -18,7 +18,6 @@
     "rules": {
       "preset": "recommended",
       "complexity": {
-        "useLiteralKeys": "off",
         "noStaticOnlyClass": "error",
         "noUnnecessaryTemplateExpression": "error",
         "noUselessCatch": "error",
