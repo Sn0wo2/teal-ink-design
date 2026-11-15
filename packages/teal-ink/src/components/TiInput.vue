@@ -31,7 +31,7 @@ defineEmits<{
 }>()
 
 const generatedId = useId()
-const inputId = computed(() => props.id || `ti-input-${generatedId}`)
+const inputId = computed(() => props.id || generatedId)
 </script>
 
 <template>

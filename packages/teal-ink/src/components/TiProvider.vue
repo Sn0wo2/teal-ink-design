@@ -24,8 +24,7 @@ const props = withDefaults(defineProps<{
 })
 const emit = defineEmits<{ 'update:mode': [mode: TiColorMode] }>()
 const preference = typeof window === 'undefined' ? undefined : window.matchMedia('(prefers-color-scheme: dark)')
-const systemEvents = preference && new AbortController()
-const reducedMotion = typeof window === 'undefined' ? undefined : window.matchMedia('(prefers-reduced-motion: reduce)')
+const systemEvents = new AbortController()
 const currentMode = ref(props.mode)
 const changing = ref(false)
 const systemDark = ref(preference?.matches ?? false)
@@ -48,7 +47,9 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
     await nextTick()
   }
 
-  if (!props.global || theme.value === (next === 'system' ? (preference?.matches ? 'dark' : 'light') : next) || reducedMotion?.matches || typeof document === 'undefined' || !document.startViewTransition) {
+  if (!props.global || theme.value === (next === 'system' ? (preference?.matches ? 'dark' : 'light') : next)
+    || typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    || typeof document === 'undefined' || !document.startViewTransition) {
     await update()
     if (typeof requestAnimationFrame !== 'undefined') {
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -58,13 +59,15 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
     return
   }
 
+  const root = document.documentElement
   const rect = trigger?.getBoundingClientRect()
-  const x = rect && rect.top >= 0 && rect.bottom <= innerHeight ? rect.left + rect.width / 2 : innerWidth / 2
-  const y = rect && rect.top >= 0 && rect.bottom <= innerHeight ? rect.top + rect.height / 2 : innerHeight / 2
-  document.documentElement.style.setProperty('--ti-theme-origin-x', `${x}px`)
-  document.documentElement.style.setProperty('--ti-theme-origin-y', `${y}px`)
-  document.documentElement.style.setProperty('--ti-theme-radius', `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`)
-  document.documentElement.dataset['tiTransition'] = ''
+  const contained = rect && rect.top >= 0 && rect.bottom <= innerHeight
+  const x = contained ? rect.left + rect.width / 2 : innerWidth / 2
+  const y = contained ? rect.top + rect.height / 2 : innerHeight / 2
+  root.style.setProperty('--ti-theme-origin-x', `${x}px`)
+  root.style.setProperty('--ti-theme-origin-y', `${y}px`)
+  root.style.setProperty('--ti-theme-radius', `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`)
+  root.dataset['tiTransition'] = ''
 
   const active = document.startViewTransition(update)
   void active.ready.catch(() => {})
@@ -73,8 +76,8 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
   if (transition !== active) return
   transition = undefined
   if (currentRevision === revision) changing.value = false
-  document.documentElement.removeAttribute('data-ti-transition')
-  for (const key of ['origin-x', 'origin-y', 'radius']) document.documentElement.style.removeProperty(`--ti-theme-${key}`)
+  root.removeAttribute('data-ti-transition')
+  for (const key of ['origin-x', 'origin-y', 'radius']) root.style.removeProperty(`--ti-theme-${key}`)
 }
 
 provide(themeKey, { mode: currentMode, theme, setMode })
@@ -89,17 +92,15 @@ watch([theme, () => props.global], () => {
 onMounted(() => {
   mounted = true
   if (props.global) setGlobalTheme(owner, theme.value)
-  if (preference && systemEvents) {
-    preference.addEventListener('change', () => {
-      if (requestedMode === 'system') void setMode('system')
-    }, { signal: systemEvents.signal })
-  }
+  preference?.addEventListener('change', () => {
+    if (requestedMode === 'system') void setMode('system')
+  }, { signal: systemEvents.signal })
 })
 
 onBeforeUnmount(() => {
   mounted = false
   transition?.skipTransition()
-  systemEvents?.abort()
+  systemEvents.abort()
   setGlobalTheme(owner)
 })
 </script>

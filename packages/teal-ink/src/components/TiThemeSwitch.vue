@@ -32,9 +32,8 @@ function startDrag(value: TiColorMode, event: PointerEvent) {
   window.addEventListener('pointerup', stopDrag, { signal: dragEvents.signal, capture: true })
   window.addEventListener('pointercancel', stopDrag, { signal: dragEvents.signal, capture: true })
   window.addEventListener('blur', stopDrag, { signal: dragEvents.signal })
-  if ((event.target as Element).hasPointerCapture(event.pointerId)) {
-    (event.target as Element).releasePointerCapture(event.pointerId)
-  }
+  const target = event.target as Element
+  if (target.hasPointerCapture(event.pointerId)) target.releasePointerCapture(event.pointerId)
   select(value, event.currentTarget as HTMLElement)
 }
 
