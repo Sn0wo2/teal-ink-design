@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: ["v*"]
+    tags: ["v*.*"]
   workflow_dispatch:
     inputs:
       version:
@@ -19,6 +19,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
+      checks: read
       contents: write
       id-token: write
     env:
@@ -45,7 +46,9 @@ jobs:
 
       - name: Normalize version
         id: version
-        run: bun scripts/normalize-release-version.js "${{ inputs.version || github.ref_name }}"
+        env:
+          RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
+        run: bun scripts/normalize-release-version.js "$RELEASE_VERSION"
 
       - name: Check for an already published release
         id: release
@@ -65,10 +68,24 @@ jobs:
         if: steps.release.outputs.skip != 'true'
         run: bun scripts/sync-release-version.js
 
-      - name: Reuse CI checks for this commit
+      - name: Detect reusable CI checks
+        id: ci
         if: >-
           github.event_name == 'push' && steps.release.outputs.skip != 'true' &&
           steps.sync.outputs.changed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=Checks" --jq '.total_count')" -gt 0 ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Reuse CI checks for this commit
+        if: >-
+          github.event_name == 'push' && steps.release.outputs.skip != 'true' &&
+          steps.sync.outputs.changed != 'true' && steps.ci.outputs.found == 'true'
         timeout-minutes: 20
         uses: lewagon/wait-on-check-action@v1.9.1
         with:
@@ -80,7 +97,8 @@ jobs:
       - name: Check the release candidate
         if: >-
           steps.release.outputs.skip != 'true' &&
-          (github.event_name == 'workflow_dispatch' || steps.sync.outputs.changed == 'true')
+          (github.event_name == 'workflow_dispatch' || steps.sync.outputs.changed == 'true' ||
+          steps.ci.outputs.found != 'true')
         run: |
           bun install --frozen-lockfile
           bun run ci

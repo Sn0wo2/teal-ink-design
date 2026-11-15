@@ -1,19 +1,16 @@
 import { appendFileSync } from "node:fs"
 
-async function main() {
+try {
   for (const name of ["GITHUB_REPOSITORY", "GH_TOKEN", "GITHUB_OUTPUT"]) {
     if (!process.env[name]) throw new Error(`${name} is not set`)
   }
 
-  const tag = process.argv[2] ?? process.env.GITHUB_REF_NAME
-  if (!tag) throw new Error("Release tag is not set")
+  if (!(process.argv[2] ?? process.env.GITHUB_REF_NAME)) throw new Error("Release tag is not set")
 
   const repositoryParts = process.env.GITHUB_REPOSITORY.split("/")
   if (repositoryParts.length !== 2 || repositoryParts.some((part) => !part)) {
     throw new Error("GITHUB_REPOSITORY must be in owner/name format")
   }
-  const [owner, name] = repositoryParts
-
   const response = await fetch(process.env.GITHUB_GRAPHQL_URL ?? "https://api.github.com/graphql", {
     method: "POST",
     headers: {
@@ -26,7 +23,11 @@ async function main() {
           release(tagName: $tag) { isDraft }
         }
       }`,
-      variables: { owner, name, tag },
+      variables: {
+        owner: repositoryParts[0],
+        name: repositoryParts[1],
+        tag: process.argv[2] ?? process.env.GITHUB_REF_NAME,
+      },
     }),
     signal: AbortSignal.timeout(30_000),
   })
@@ -59,15 +60,13 @@ async function main() {
     throw new Error("Invalid release lookup response")
   }
 
-  const skip = release !== null && !release.isDraft
-  appendFileSync(process.env.GITHUB_OUTPUT, `skip=${skip}\n`)
-  const message = skip
-    ? `Release ${tag} is already published; skipping.`
-    : `Release ${tag} is not published; continuing.`
-  console.log(message)
-}
-
-main().catch((error) => {
+  appendFileSync(process.env.GITHUB_OUTPUT, `skip=${release !== null && !release.isDraft}\n`)
+  console.log(
+    release !== null && !release.isDraft
+      ? `Release ${process.argv[2] ?? process.env.GITHUB_REF_NAME} is already published; skipping.`
+      : `Release ${process.argv[2] ?? process.env.GITHUB_REF_NAME} is not published; continuing.`,
+  )
+} catch (error) {
   console.error(error.message)
   process.exitCode = 1
-})
+}
