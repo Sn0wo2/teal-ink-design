@@ -23,19 +23,19 @@ import {
 import { type Component, computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { copyToClipboard } from '../utils/clipboard'
+import { exampleName } from '../utils/example-name'
 
 const groups = ['teal', 'inputs', 'display', 'feedback', 'layout'] as const
-const exampleSuffix = /\.example\.vue$/
 const privateProp = /^(private|internal|builtinTheme)/
 const eventProp = /^on[A-Z]/
 
 const { t, locale } = useI18n({ useScope: 'global' })
-const exampleSources = import.meta.glob<string>('../examples/*/*.example.vue', { eager: true, query: '?raw', import: 'default' })
-const examples = Object.entries(import.meta.glob<Component>('../examples/*/*.example.vue', { eager: true, import: 'default' }))
+const exampleSources = import.meta.glob<string>('../examples/*/*[.-]example.vue', { eager: true, query: '?raw', import: 'default' })
+const examples = Object.entries(import.meta.glob<Component>('../examples/*/*[.-]example.vue', { eager: true, import: 'default' }))
   .map(([path, example]) => {
-    const [directory, filename] = path.split('/').slice(-2)
-    if (!(directory && filename)) throw new Error(`Invalid example path: ${path}`)
-    const name = filename.replace(exampleSuffix, '')
+    const directory = path.split('/').at(-2)
+    if (!directory) throw new Error(`Invalid example path: ${path}`)
+    const name = exampleName(path)
     const source = exampleSources[path]
     if (source === undefined) throw new Error(`Missing example source: ${path}`)
     return {

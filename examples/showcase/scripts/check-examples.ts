@@ -1,12 +1,12 @@
 import { globSync } from "node:fs"
-import { basename } from "node:path"
 import { fileURLToPath } from "node:url"
 import * as library from "@teal-ink/vue"
+import { exampleName } from "../src/utils/example-name"
 
 const componentName = /^(N[A-Z]|NxButton|Ti[A-Z])/
-const names = globSync("*/*.example.vue", {
+const names = globSync("*/*[.-]example.vue", {
   cwd: fileURLToPath(new URL("../src/examples/", import.meta.url)),
-}).map((path) => basename(path, ".example.vue"))
+}).map(exampleName)
 const components = Object.entries(library)
   .filter(
     ([name, value]) =>
