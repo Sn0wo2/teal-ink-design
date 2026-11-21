@@ -201,6 +201,22 @@ function saveNote() {
             </div>
             <div class="color-roles"><p><span class="role-dot primary-dot" aria-hidden="true" />{{ t('showcase.primaryRole') }}</p><p><span class="role-dot secondary-dot" aria-hidden="true" />{{ t('showcase.secondaryRole') }}</p></div>
             <p class="palette-note">{{ t('showcase.paletteNote') }}</p>
+            <section class="state-palette" aria-labelledby="state-palette-title">
+              <div class="sheet-heading"><h3 id="state-palette-title">{{ t('showcase.statePalette') }}</h3><span>{{ t('showcase.paletteHint') }}</span></div>
+              <div v-for="mode in (['light', 'dark'] as const)" :key="mode" class="state-palette-mode">
+                <h4>{{ t(`showcase.${mode}`) }}</h4>
+                <div class="neutral-tokens">
+                  <button
+                    v-for="role in (['success', 'info', 'warning', 'error'] as const)"
+                    :key="role"
+                    type="button"
+                    class="neutral-token"
+                    :aria-label="t('showcase.copyColor', { color: `${t(`showcase.${mode}`)} · ${t(`showcase.stateColors.${role}`)}`, hex: themes[mode][role].toUpperCase() })"
+                    @click="copy(themes[mode][role].toUpperCase())"
+                  ><span class="neutral-chip" :style="{ backgroundColor: themes[mode][role] }" /><span class="token-name">{{ t(`showcase.stateColors.${role}`) }}</span><span class="token-hex">{{ themes[mode][role].toUpperCase() }}</span></button>
+                </div>
+              </div>
+            </section>
           </div>
           <div class="type-sheet">
             <div class="sheet-heading"><h3>{{ t('showcase.typography') }}</h3><span>{{ t('showcase.typeHint') }}</span></div>
@@ -319,6 +335,10 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .sheet-heading h3 { font-size: var(--ti-font-size-body); font-weight: 500; }
 .sheet-heading > span { color: var(--ti-color-text-secondary); font-size: var(--ti-font-size-caption); }
 .neutral-tokens { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: var(--ti-space-3); }
+.state-palette { margin-top: var(--ti-space-6); }
+.state-palette-mode + .state-palette-mode { margin-top: var(--ti-space-4); }
+.state-palette-mode h4 { margin: 0 0 var(--ti-space-2); color: var(--ti-color-text-secondary); }
+.state-palette .neutral-chip { aspect-ratio: 3 / 1; }
 .neutral-token, .accent-token { appearance: none; min-width: 0; padding: 0; border: 0; border-radius: var(--ti-radius-control); background: transparent; color: var(--ti-color-text); font: inherit; text-align: left; cursor: pointer; }
 .neutral-token { display: grid; align-content: start; gap: var(--ti-space-1); padding-bottom: var(--ti-space-2); }
 .neutral-token:hover .token-name, .accent-token:hover .copy-label { color: var(--ti-color-accent-text); }

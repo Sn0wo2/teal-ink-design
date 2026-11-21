@@ -50,6 +50,13 @@
     "copyColor": "复制 {color} 色值 {hex}",
     "paletteHint": "点击色板, 复制 HEX",
     "paletteNote": "色板保持固定色值, 界面实际使用随明暗模式变化的语义变量",
+    "statePalette": "语义状态色",
+    "stateColors": {
+      "success": "成功",
+      "info": "信息提示",
+      "warning": "警告",
+      "error": "错误"
+    },
     "typography": "文字与留白",
     "typeHint": "三种字体, 分工明确",
     "typeHeading": "标题 · 衬线",

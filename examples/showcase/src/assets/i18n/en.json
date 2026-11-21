@@ -50,6 +50,13 @@
     "copyColor": "Copy {color} color {hex}",
     "paletteHint": "Select a swatch to copy HEX",
     "paletteNote": "Palette samples keep their colors. Interfaces use semantic tokens that adapt to light and dark mode.",
+    "statePalette": "Status colors",
+    "stateColors": {
+      "success": "Success",
+      "info": "Info",
+      "warning": "Warning",
+      "error": "Error"
+    },
     "typography": "Type and space",
     "typeHint": "Three voices, distinct roles",
     "typeHeading": "Headings · serif",
