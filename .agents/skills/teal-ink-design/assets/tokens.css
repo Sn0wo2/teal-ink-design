@@ -1,0 +1,94 @@
+:where([data-ti-theme="light"], [data-ti-theme="dark"]) {
+  --ti-palette-paper: #faf9f5;
+  --ti-palette-ivory: #f5f4ed;
+  --ti-palette-sand: #e8e6dc;
+  --ti-palette-charcoal: #292929;
+  --ti-palette-ink: #141413;
+  --ti-palette-primary: #39c5bb;
+  --ti-palette-secondary: #8a9a78;
+  --ti-font-sans: "Noto Sans SC Variable", "Noto Sans SC", "Noto Sans", sans-serif;
+  --ti-font-serif: "Noto Serif SC Variable", "Noto Serif SC", "Noto Serif", serif;
+  --ti-font-mono:
+    "Noto Sans Mono Variable", "Noto Sans Mono", "Noto Sans Mono CJK SC", "Noto Sans SC Variable", "Noto Sans SC",
+    monospace;
+  --ti-font-emoji: "Noto Color Emoji", "Noto Emoji", emoji;
+  --ti-font-size-caption: 0.6875rem;
+  --ti-font-size-label: 0.75rem;
+  --ti-font-size-body: 0.875rem;
+  --ti-font-size-heading: 1.75rem;
+  --ti-font-size-display: clamp(3rem, 5vw, 4.25rem);
+  --ti-line-height-body: 1.7;
+  --ti-line-height-heading: 1.28;
+  --ti-line-height-control: 1.5;
+  --ti-radius-control: 8px;
+  --ti-radius-swatch: 12px;
+  --ti-radius-display: 18px;
+  --ti-radius-pill: 999px;
+  --ti-corner-shape: squircle;
+  --ti-control-height: 36px;
+  --ti-motion-duration: 160ms;
+  --ti-motion-theme-duration: 360ms;
+  --ti-motion-easing: ease-out;
+  --ti-space-1: 4px;
+  --ti-space-2: 8px;
+  --ti-space-3: 12px;
+  --ti-space-4: 16px;
+  --ti-space-5: 20px;
+  --ti-space-6: 24px;
+  --ti-space-8: 32px;
+  --ti-space-10: 40px;
+  --ti-space-12: 48px;
+  --ti-space-16: 64px;
+  --ti-space-20: 80px;
+  --ti-space-24: 96px;
+  --ti-color-primary: #39c5bb;
+  --ti-color-primary-hover: #60cfc7;
+  --ti-color-primary-pressed: #30a79f;
+  --ti-color-secondary: #8a9a78;
+  --ti-color-accent: #39c5bb;
+  --ti-color-accent-hover: #60cfc7;
+  --ti-color-accent-pressed: #30a79f;
+  --ti-color-on-accent: #141413;
+}
+
+:where([data-ti-theme="light"]) {
+  color-scheme: light;
+  --ti-color-canvas: #faf9f5;
+  --ti-color-surface: #f5f4ed;
+  --ti-color-raised: #faf9f5;
+  --ti-color-text: #141413;
+  --ti-color-text-secondary: #6f6e68;
+  --ti-color-border: #dedcd2;
+  --ti-color-border-subtle: #dedcd28c;
+  --ti-color-border-strong: #6f6e68;
+  --ti-color-accent-text: #18756f;
+  --ti-color-selection: #e0f2ee;
+  --ti-color-on-selection: #141413;
+  --ti-color-success: #265b19;
+  --ti-color-info: #74556f;
+  --ti-color-warning: #5a4815;
+  --ti-color-error: #7f2c28;
+  --ti-color-focus: #18756f;
+  --ti-shadow-floating: 0 20px 50px rgb(0 0 0 / 5%);
+}
+
+:where([data-ti-theme="dark"]) {
+  color-scheme: dark;
+  --ti-color-canvas: #141413;
+  --ti-color-surface: #242422;
+  --ti-color-raised: #292929;
+  --ti-color-text: #faf9f5;
+  --ti-color-text-secondary: #aaa79f;
+  --ti-color-border: #3f3f39;
+  --ti-color-border-subtle: #faf9f51a;
+  --ti-color-border-strong: #aaa79f;
+  --ti-color-accent-text: #39c5bb;
+  --ti-color-selection: #1d3835;
+  --ti-color-on-selection: #faf9f5;
+  --ti-color-success: #7ab948;
+  --ti-color-info: #c2a0c2;
+  --ti-color-warning: #d1a041;
+  --ti-color-error: #ee8884;
+  --ti-color-focus: #39c5bb;
+  --ti-shadow-floating: 0 20px 50px rgb(0 0 0 / 28%);
+}
