@@ -1,0 +1,1 @@
+codex-theme-v1:{"codeThemeId":"absolutely","theme":{"accent":"#39c5bb","accentSource":"custom","contrast":45,"fonts":{"code":null,"ui":null},"ink":"#faf9f5","opaqueWindows":true,"semanticColors":{"diffAdded":"#7ab948","diffRemoved":"#ee8884","skill":"#39c5bb"},"surface":"#141413"},"variant":"dark"}
