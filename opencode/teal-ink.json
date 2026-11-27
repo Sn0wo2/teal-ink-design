@@ -50,6 +50,14 @@
       "light": "#faf9f5",
       "dark": "#292929"
     },
+    "backgroundMenu": {
+      "light": "#faf9f5",
+      "dark": "#292929"
+    },
+    "selectedListItemText": {
+      "light": "#faf9f5",
+      "dark": "#141413"
+    },
     "border": {
       "light": "#dedcd2",
       "dark": "#3f3f39"
@@ -171,28 +179,28 @@
       "dark": "#aaa79f"
     },
     "syntaxKeyword": {
-      "light": "#141413",
-      "dark": "#faf9f5"
+      "light": "#74556f",
+      "dark": "#c2a0c2"
     },
     "syntaxFunction": {
-      "light": "#141413",
-      "dark": "#faf9f5"
+      "light": "#18756f",
+      "dark": "#39c5bb"
     },
     "syntaxVariable": {
       "light": "#141413",
       "dark": "#faf9f5"
     },
     "syntaxString": {
-      "light": "#6f6e68",
-      "dark": "#aaa79f"
+      "light": "#141413",
+      "dark": "#8a9a78"
     },
     "syntaxNumber": {
-      "light": "#141413",
-      "dark": "#faf9f5"
+      "light": "#74556f",
+      "dark": "#c2a0c2"
     },
     "syntaxType": {
-      "light": "#6f6e68",
-      "dark": "#aaa79f"
+      "light": "#141413",
+      "dark": "#faf9f5"
     },
     "syntaxOperator": {
       "light": "#6f6e68",
