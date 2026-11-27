@@ -106,8 +106,7 @@ export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
       textColorGhostHoverPrimary: colors.accentText,
       textColorGhostPressedPrimary: colors.accentText,
       borderFocus: `1px solid ${colors.focus}`,
-      rippleColor: colors.focus,
-      rippleColorPrimary: colors.focus,
+      rippleDuration: "0s",
     },
     Input: {
       color: colors.raised,

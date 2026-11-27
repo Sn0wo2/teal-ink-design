@@ -157,10 +157,27 @@ onBeforeUnmount(() => {
 
 @supports (corner-shape: squircle) {
   :is(.ti-provider, :root[data-ti-theme] body) :is(
+    .n-base-selection,
+    .n-base-selection__border,
+    .n-base-selection__state-border,
+    .n-button,
+    .n-button__border,
+    .n-button__state-border,
+    .n-checkbox-box,
+    .n-checkbox-box__border,
+    .n-input,
+    .n-input__border,
+    .n-input__state-border,
+    .n-message,
+    .n-tag
+  ) {
+    corner-shape: var(--ti-corner-shape-control);
+  }
+
+  :is(.ti-provider, :root[data-ti-theme] body) :is(
     .n-alert,
     .n-auto-complete-menu,
     .n-base-select-menu,
-    .n-base-selection,
     .n-card,
     .n-cascader-menu,
     .n-color-picker,
@@ -168,9 +185,7 @@ onBeforeUnmount(() => {
     .n-date-panel,
     .n-dialog,
     .n-dropdown-menu,
-    .n-input,
     .n-mention-menu,
-    .n-message,
     .n-notification,
     .n-popover,
     .n-popselect-menu,
@@ -181,7 +196,7 @@ onBeforeUnmount(() => {
     corner-shape: var(--ti-corner-shape);
   }
 
-  :is(.ti-provider, :root[data-ti-theme] body) .n-input--round { corner-shape: round; }
+  :is(.ti-provider, :root[data-ti-theme] body) :is(.n-input--round, .n-tag--round, .n-button--circle) { corner-shape: round; }
 }
 
 :is(:root[data-ti-transition], .ti-provider[data-ti-changing]) {
