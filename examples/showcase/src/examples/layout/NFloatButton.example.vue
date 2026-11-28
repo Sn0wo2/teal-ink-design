@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { NFloatButton, NText, TiCard } from '@teal-ink/vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
   <TiCard size="small" class="float-preview">
-    <NText>{{ t('examples.NFloatButton.content') }}</NText>
+    <NText>{{ $t('examples.NFloatButton.content') }}</NText>
     <NFloatButton position="absolute" :right="12" :bottom="12" type="primary">+</NFloatButton>
   </TiCard>
 </template>

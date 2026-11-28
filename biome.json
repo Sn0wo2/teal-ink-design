@@ -86,7 +86,8 @@
   "javascript": {
     "formatter": {
       "semicolons": "asNeeded"
-    }
+    },
+    "globals": ["$t"]
   },
   "html": {
     "experimentalFullSupportEnabled": true

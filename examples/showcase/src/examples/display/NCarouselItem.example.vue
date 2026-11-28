@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { NCarousel, NCarouselItem, NP } from '@teal-ink/vue'
-import { useI18n } from 'vue-i18n'
-
- 
-const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
    <NCarousel :autoplay="false" show-dots>
-    <NCarouselItem><NP class="slide">{{ t('examples.NCarouselItem.first') }}</NP></NCarouselItem>
-    <NCarouselItem><NP class="slide slide--accent">{{ t('examples.NCarouselItem.another') }}</NP></NCarouselItem>
+    <NCarouselItem><NP class="slide">{{ $t('examples.NCarouselItem.first') }}</NP></NCarouselItem>
+    <NCarouselItem><NP class="slide slide--accent">{{ $t('examples.NCarouselItem.another') }}</NP></NCarouselItem>
   </NCarousel>
 </template>
 

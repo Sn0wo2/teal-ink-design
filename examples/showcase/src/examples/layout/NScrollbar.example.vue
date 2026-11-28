@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { NFlex, NP, NScrollbar, TiCard } from '@teal-ink/vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
   <TiCard size="small">
     <NScrollbar class="scroll-preview">
       <NFlex vertical :size="16" class="scroll-content">
-        <NP>{{ t('examples.NScrollbar.preview') }}</NP>
-        <NP class="scroll-end">{{ t('examples.NScrollbar.instruction') }}</NP>
+        <NP>{{ $t('examples.NScrollbar.preview') }}</NP>
+        <NP class="scroll-end">{{ $t('examples.NScrollbar.instruction') }}</NP>
       </NFlex>
     </NScrollbar>
   </TiCard>
