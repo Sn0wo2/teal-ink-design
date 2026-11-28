@@ -26,15 +26,19 @@ import { copyToClipboard } from '../utils/clipboard'
 import { exampleName } from '../utils/example-name'
 
 const groups = ['teal', 'inputs', 'display', 'feedback', 'layout'] as const
+type Group = (typeof groups)[number]
+type Tab = 'preview' | 'source' | 'api' | 'import'
+const defaultComponent = 'TiButton'
 const privateProp = /^(private|internal|builtinTheme)/
 const eventProp = /^on[A-Z]/
+const isGroup = (value: string | undefined): value is Group => groups.includes(value as Group)
 
 const { t, locale } = useI18n({ useScope: 'global' })
 const exampleSources = import.meta.glob<string>('../examples/*/*[.-]example.vue', { eager: true, query: '?raw', import: 'default' })
 const examples = Object.entries(import.meta.glob<Component>('../examples/*/*[.-]example.vue', { eager: true, import: 'default' }))
   .map(([path, example]) => {
-    const directory = path.split('/').at(-2)
-    if (!directory) throw new Error(`Invalid example path: ${path}`)
+    const group = path.split('/').at(-2)
+    if (!isGroup(group)) throw new Error(`Invalid example path: ${path}`)
     const name = exampleName(path)
     const source = exampleSources[path]
     if (source === undefined) throw new Error(`Missing example source: ${path}`)
@@ -42,22 +46,23 @@ const examples = Object.entries(import.meta.glob<Component>('../examples/*/*[.-]
       name,
       example,
       source,
-      group: directory as typeof groups[number],
+      group,
       component: library[name as keyof typeof library] as Component,
     }
   }).sort((a, b) => a.name.localeCompare(b.name))
+const exampleByName = new Map(examples.map((entry) => [entry.name, entry] as const))
 
 const initialName = new URLSearchParams(window.location.search).get('component')
-const selectedName = ref(examples.find((entry) => entry.name === initialName)?.name ?? 'TiButton')
+const selectedName = ref(initialName && exampleByName.has(initialName) ? initialName : defaultComponent)
 const selectedEntry = computed(() => {
-  const entry = examples.find((entry) => entry.name === selectedName.value)
+  const entry = exampleByName.get(selectedName.value)
   if (!entry) throw new Error(`Unknown component example: ${selectedName.value}`)
   return entry
 })
 const searchText = ref('')
-const categoryFilter = ref('all')
-const activeTab = ref<'preview' | 'source' | 'api' | 'import'>('preview')
-const tabProps = (name: typeof activeTab.value) => {
+const categoryFilter = ref<Group | 'all'>('all')
+const activeTab = ref<Tab>('preview')
+const tabProps = (name: Tab) => {
   return {
     role: 'button',
     tabindex: 0,
@@ -73,29 +78,34 @@ const resetKey = ref(0)
 const copyMessage = ref<'copied' | 'copyFailed' | ''>('')
 const locationEvents = new AbortController()
 const { theme } = useTiTheme()
+const groupLabel = (group: Group, count: number) =>
+  t('workshop.groupCount', { label: t(`workshop.groups.${group}`), count })
 const categoryOptions = computed(() => [
   { label: t('workshop.allCategories', { count: examples.length }), value: 'all' },
   ...groups.map((group) => {
     return {
-      label: t('workshop.groupCount', {
-        label: t(`workshop.groups.${group}`),
-        count: examples.filter((entry) => entry.group === group).length,
-      }),
+      label: groupLabel(group, examples.filter((entry) => entry.group === group).length),
       value: group,
     }
   }),
 ])
 const filteredEntries = computed(() => {
   const query = searchText.value.trim().toLocaleLowerCase(locale.value)
-  return examples.filter((entry) => (!query || `${entry.name} ${t(`workshop.groups.${entry.group}`)}`.toLocaleLowerCase().includes(query))
-    && (categoryFilter.value === 'all' || entry.group === categoryFilter.value))
+  return examples.filter((entry) => {
+    const matchesQuery =
+      !query || `${entry.name} ${t(`workshop.groups.${entry.group}`)}`.toLocaleLowerCase().includes(query)
+    return matchesQuery && (categoryFilter.value === 'all' || entry.group === categoryFilter.value)
+  })
 })
+const componentOptions = computed(() => filteredEntries.value.map(({ name }) => {
+  return { label: name, value: name }
+}))
 const menuOptions = computed(() => groups.map((group) => {
   const entries = filteredEntries.value.filter((entry) => entry.group === group)
   return {
     type: 'group' as const,
     key: group,
-    label: t('workshop.groupCount', { label: t(`workshop.groups.${group}`), count: entries.length }),
+    label: groupLabel(group, entries.length),
     children: entries.map(({ name }) => {
       return { label: name, key: name }
     }),
@@ -120,26 +130,46 @@ const propRows = computed(() => Object.entries((selectedEntry.value.component as
       defaultValue: typeof prop.default === 'function' ? t('workshop.factoryDefault') : String(prop.default ?? '—'),
     }
   }))
-const importCode = computed(() => `import { ${selectedName.value === 'TiProvider' ? 'TiProvider' : `${selectedName.value}, TiProvider`} } from '@teal-ink/vue'\nimport '@teal-ink/vue/style.css'`)
+const importCode = computed(() => {
+  const names = selectedName.value === 'TiProvider' ? 'TiProvider' : `${selectedName.value}, TiProvider`
+  return `import { ${names} } from '@teal-ink/vue'\nimport '@teal-ink/vue/style.css'`
+})
 
-function selectComponent(name: string) {
-  if (!examples.some((entry) => entry.name === name)) return
-  selectedName.value = name
+function resetView() {
   activeTab.value = 'preview'
   copyMessage.value = ''
+}
+
+function selectComponent(name: string) {
+  if (!exampleByName.has(name)) return
+  selectedName.value = name
+  resetView()
   const url = new URL(window.location.href)
   url.searchParams.set('component', name)
   window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`)
 }
 
+async function copyImport() {
+  copyMessage.value = (await copyToClipboard(importCode.value)) ? 'copied' : 'copyFailed'
+}
+
+function handleMenuKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Enter' && event.key !== ' ') return
+  const name = (event.target as HTMLElement).getAttribute('data-component')
+  if (!name) return
+  event.preventDefault()
+  selectComponent(name)
+}
+
+function syncFromLocation() {
+  const name = new URLSearchParams(window.location.search).get('component')
+  selectedName.value = name && exampleByName.has(name) ? name : defaultComponent
+  resetView()
+}
+
 onMounted(async () => {
-  window.addEventListener('popstate', () => {
-    const name = new URLSearchParams(window.location.search).get('component')
-    selectedName.value = examples.find((entry) => entry.name === name)?.name ?? 'TiButton'
-    activeTab.value = 'preview'
-    copyMessage.value = ''
-  }, { signal: locationEvents.signal })
-  if (examples.some((entry) => entry.name === initialName)) {
+  window.addEventListener('popstate', syncFromLocation, { signal: locationEvents.signal })
+  if (initialName && exampleByName.has(initialName)) {
     await nextTick()
     document.getElementById('components')?.scrollIntoView({
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start',
@@ -172,7 +202,7 @@ onBeforeUnmount(() => locationEvents.abort())
               <NSelect v-model:value="categoryFilter" :aria-label="t('workshop.exampleCategory')" :options="categoryOptions" />
             </NFormItem>
             <NFormItem :label="t('workshop.quickSelect')" :show-feedback="false" class="directory__mobile-picker">
-              <NSelect :value="selectedName" :aria-label="t('workshop.quickSelect')" :options="filteredEntries.map(({ name }) => { return { label: name, value: name } })" filterable @update:value="selectComponent" />
+              <NSelect :value="selectedName" :aria-label="t('workshop.quickSelect')" :options="componentOptions" filterable @update:value="selectComponent" />
             </NFormItem>
           </div>
           <NFlex v-if="filteredEntries.length" class="directory__list" :wrap="false" :aria-label="t('workshop.availableComponents')">
@@ -180,13 +210,7 @@ onBeforeUnmount(() => locationEvents.abort())
               <NMenu :value="selectedName" :options="menuOptions" :indent="8" :root-indent="10"
                 :aria-label="t('workshop.availableComponents')"
                 :node-props="option => { return { tabindex: option.type === 'group' ? undefined : 0, 'data-component': String(option.key) } }"
-                @update:value="selectComponent" @keydown="(event: KeyboardEvent) => {
-                  if (event.key !== 'Enter' && event.key !== ' ') return
-                   const name = (event.target as HTMLElement).getAttribute('data-component')
-                  if (!name) return
-                  event.preventDefault()
-                  selectComponent(name)
-                }" />
+                @update:value="selectComponent" @keydown="handleMenuKeydown" />
             </NScrollbar>
           </NFlex>
           <NEmpty v-else :description="t('workshop.noMatchingComponents')" class="directory__empty" aria-live="polite">
@@ -201,7 +225,7 @@ onBeforeUnmount(() => locationEvents.abort())
             <NText depth="3" class="stage__group">{{ t(`workshop.groups.${selectedEntry.group}`) }}</NText>
             <NH3 class="stage__title">{{ selectedEntry.name }}</NH3>
           </NFlex>
-          <TiButton size="small" @click="resetKey++; activeTab = 'preview'; copyMessage = ''">{{ t('workshop.resetExample') }}</TiButton>
+          <TiButton size="small" @click="resetKey++; resetView()">{{ t('workshop.resetExample') }}</TiButton>
         </header>
         <NTabs v-model:value="activeTab" type="line" class="stage__tabs">
           <NTabPane name="preview" :tab="t('workshop.preview')" :tab-props="tabProps('preview')">
@@ -231,7 +255,7 @@ onBeforeUnmount(() => locationEvents.abort())
             <NFlex vertical class="stage__import">
               <NFlex justify="space-between" align="center" :wrap="true">
                 <NText strong>{{ t('workshop.onDemandImport') }}</NText>
-                <TiButton size="small" @click="copyToClipboard(importCode).then(success => { copyMessage = success ? 'copied' : 'copyFailed' })">{{ t('workshop.copyCode') }}</TiButton>
+                <TiButton size="small" @click="copyImport">{{ t('workshop.copyCode') }}</TiButton>
               </NFlex>
               <NCode :code="importCode" language="javascript" class="stage__code" />
               <NText depth="3">{{ t('workshop.providerExplanation') }}</NText>

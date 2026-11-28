@@ -21,6 +21,11 @@ const message = useTiMessage()
 const { theme } = useTiTheme()
 watchEffect(() => document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themes[theme.value].canvas))
 const copied = ref(false)
+const buildCommand = 'bun run build:lib'
+const languageOptions = computed(() => [
+  { label: t('showcase.languages.chinese'), key: 'zh-CN' },
+  { label: t('showcase.languages.english'), key: 'en' },
+])
 
 const swatchCards = [
   { key: 'paper', x: 3, y: 3, w: 28, tilt: -4, z: 2, tone: 'ink' },
@@ -76,10 +81,14 @@ import '@teal-ink/vue/style.css'
   </TiProvider>
 </template>`)
 
+function setLocale(key: string | number) {
+  locale.value = String(key)
+}
+
 async function copy(value: string) {
   if (await copyToClipboard(value)) {
     message.success(t('showcase.copied'))
-    if (value === 'bun run build:lib') copied.value = true
+    if (value === buildCommand) copied.value = true
   } else message.error(t('showcase.copyError'))
 }
 </script>
@@ -98,14 +107,7 @@ async function copy(value: string) {
         <a href="#start">{{ t('showcase.start') }}</a>
       </nav>
       <div class="header-tools">
-        <NDropdown
-          trigger="click"
-          :options="[
-            { label: t('showcase.languages.chinese'), key: 'zh-CN' },
-            { label: t('showcase.languages.english'), key: 'en' },
-          ]"
-          @select="(key: string | number) => { locale = String(key) }"
-        >
+        <NDropdown trigger="click" :options="languageOptions" @select="setLocale">
           <TiButton variant="text" size="small" :aria-label="t('showcase.language')" :title="t('showcase.language')">
             {{ t('showcase.languageCode') }}
           </TiButton>
@@ -203,7 +205,7 @@ async function copy(value: string) {
         <div class="start-details">
           <div class="install-panel">
             <div class="install-heading"><span>{{ t('showcase.workspaceSetup') }}</span><code>Vue 3 + TypeScript</code></div>
-            <div class="install-command"><code><span class="muted" aria-hidden="true">$</span> bun run build:lib</code><TiButton variant="text" size="small" :aria-label="t(copied ? 'showcase.copyAgain' : 'showcase.copyCommand')" @click="copy('bun run build:lib')">{{ t(copied ? 'showcase.copied' : 'showcase.copy') }}</TiButton></div>
+            <div class="install-command"><code><span class="muted" aria-hidden="true">$</span> {{ buildCommand }}</code><TiButton variant="text" size="small" :aria-label="t(copied ? 'showcase.copyAgain' : 'showcase.copyCommand')" @click="copy(buildCommand)">{{ t(copied ? 'showcase.copied' : 'showcase.copy') }}</TiButton></div>
             <NCode :code="usage" language="html" class="usage-code" />
           </div>
           <div id="ecosystems" class="ecosystem-block" :aria-label="t('showcase.ecosystems.link')">
