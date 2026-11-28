@@ -4,6 +4,8 @@ import { onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 import { useTiTheme } from '../context'
 import type { TiColorMode } from '../tokens'
 
+const modeOptions = ['light', 'dark', 'system'] as const
+
 defineProps<{
   label: string
   labels: Record<TiColorMode, string>
@@ -66,7 +68,7 @@ function stopDrag(event?: Event) {
     @update:value="select"
   >
     <NTab
-      v-for="option in (['light', 'dark', 'system'] as const)"
+      v-for="option in modeOptions"
       :key="option"
       :name="option"
       @pointerdown="startDrag(option, $event)"

@@ -94,15 +94,14 @@ export const themes = {
   },
 } as const
 
+const cssVariable = (name: string) => `--ti-${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`
+
 export function createCssVariables(theme: TiTheme): Record<`--ti-${string}`, string> {
   return Object.fromEntries([
     ...Object.entries(palette).map(([key, value]) => [`--ti-palette-${key}`, value]),
-    ...Object.entries(foundations).map(([key, value]) => [
-      `--ti-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`,
-      value,
-    ]),
+    ...Object.entries(foundations).map(([key, value]) => [cssVariable(key), value]),
     ...Object.entries(themes[theme]).map(([key, value]) => [
-      `--ti-${key === "shadowFloating" ? "shadow-floating" : `color-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`}`,
+      cssVariable(key === "shadowFloating" ? "shadow-floating" : `color-${key}`),
       value,
     ]),
     ...[1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24].map((step) => [`--ti-space-${step}`, `${step * 4}px`]),

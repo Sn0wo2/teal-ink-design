@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NInput } from 'naive-ui'
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
-import { computed, useId } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 
 const props = withDefaults(defineProps<{
   id?: string
@@ -30,8 +30,23 @@ defineEmits<{
   blur: [event: FocusEvent]
 }>()
 
+const attrs = useAttrs()
 const generatedId = useId()
 const inputId = computed(() => props.id || generatedId)
+
+function inputProps(): InputHTMLAttributes & TextareaHTMLAttributes {
+  const { class: _class, style: _style, ...forwarded } = attrs
+  const describedBy = [
+    typeof forwarded['aria-describedby'] === 'string' ? forwarded['aria-describedby'] : undefined,
+    props.hint ? `${inputId.value}-hint` : undefined,
+  ].filter(Boolean).join(' ') || undefined
+  return {
+    ...forwarded,
+    id: inputId.value,
+    'aria-describedby': describedBy,
+    'aria-invalid': props.status === 'error' ? 'true' : forwarded['aria-invalid'],
+  } as InputHTMLAttributes & TextareaHTMLAttributes
+}
 </script>
 
 <template>
@@ -49,15 +64,7 @@ const inputId = computed(() => props.id || generatedId)
       :disabled="disabled"
       :readonly="readonly"
       :clearable="clearable"
-      :input-props="{
-        ...Object.fromEntries(Object.entries($attrs).filter(([key]) => key !== 'class' && key !== 'style')),
-        id: inputId,
-        'aria-describedby': [
-          typeof $attrs['aria-describedby'] === 'string' ? $attrs['aria-describedby'] : undefined,
-          hint ? `${inputId}-hint` : undefined,
-        ].filter(Boolean).join(' ') || undefined,
-        'aria-invalid': status === 'error' ? 'true' : $attrs['aria-invalid'],
-      } as InputHTMLAttributes & TextareaHTMLAttributes"
+      :input-props="inputProps()"
       @update:value="$emit('update:modelValue', $event)"
       @focus="$emit('focus', $event)"
       @blur="$emit('blur', $event)"

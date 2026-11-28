@@ -28,7 +28,8 @@ const systemEvents = new AbortController()
 const currentMode = ref(props.mode)
 const changing = ref(false)
 const systemDark = ref(preference?.matches ?? false)
-const theme = computed(() => currentMode.value === 'system' ? (systemDark.value ? 'dark' : 'light') : currentMode.value)
+const resolveTheme = (mode: TiColorMode, dark = systemDark.value) => mode === 'system' ? (dark ? 'dark' : 'light') : mode
+const theme = computed(() => resolveTheme(currentMode.value))
 const owner = Symbol('teal-ink-global-theme')
 let requestedMode = props.mode
 let mounted = false
@@ -39,6 +40,9 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
   requestedMode = next
   const currentRevision = ++revision
   transition?.skipTransition()
+  const settle = () => {
+    if (currentRevision === revision) changing.value = false
+  }
   const update = async () => {
     changing.value = true
     currentMode.value = requestedMode
@@ -47,21 +51,18 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
     await nextTick()
   }
 
-  if (!props.global || theme.value === (next === 'system' ? (preference?.matches ? 'dark' : 'light') : next)
+  if (!props.global || theme.value === resolveTheme(next, preference?.matches ?? false)
     || typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches
     || typeof document === 'undefined' || !document.startViewTransition) {
     await update()
-    if (typeof requestAnimationFrame !== 'undefined') {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (currentRevision === revision) changing.value = false
-      }))
-    } else changing.value = false
+    if (typeof requestAnimationFrame === 'undefined') settle()
+    else requestAnimationFrame(() => requestAnimationFrame(settle))
     return
   }
 
   const root = document.documentElement
   const rect = trigger?.getBoundingClientRect()
-  const contained = rect && rect.top >= 0 && rect.bottom <= innerHeight
+  const contained = rect !== undefined && rect.top >= 0 && rect.bottom <= innerHeight
   const x = contained ? rect.left + rect.width / 2 : innerWidth / 2
   const y = contained ? rect.top + rect.height / 2 : innerHeight / 2
   root.style.setProperty('--ti-theme-origin-x', `${x}px`)
@@ -75,7 +76,7 @@ async function setMode(next: TiColorMode, trigger?: HTMLElement) {
   try { await active.finished } catch {}
   if (transition !== active) return
   transition = undefined
-  if (currentRevision === revision) changing.value = false
+  settle()
   root.removeAttribute('data-ti-transition')
   for (const key of ['origin-x', 'origin-y', 'radius']) root.style.removeProperty(`--ti-theme-${key}`)
 }

@@ -1,16 +1,20 @@
 import type { GlobalThemeOverrides } from "naive-ui"
 import { foundations, type TiTheme, themes } from "./tokens"
 
+type StateColorName = "primary" | "success" | "info" | "warning" | "error"
+
+function stateColor(name: StateColorName, color: string) {
+  return {
+    [`${name}Color`]: color,
+    [`${name}ColorHover`]: color,
+    [`${name}ColorPressed`]: color,
+    [`${name}ColorSuppl`]: color,
+  }
+}
+
 export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
   const colors = themes[theme]
-  const stateColor = (name: "primary" | "success" | "info" | "warning" | "error", color: string) => {
-    return {
-      [`${name}Color`]: color,
-      [`${name}ColorHover`]: color,
-      [`${name}ColorPressed`]: color,
-      [`${name}ColorSuppl`]: color,
-    }
-  }
+  const disabledText = `${colors.textSecondary}80`
   return {
     common: {
       fontFamily: foundations.fontSans,
@@ -38,13 +42,13 @@ export function createThemeOverrides(theme: TiTheme): GlobalThemeOverrides {
       textColor1: colors.text,
       textColor2: colors.textSecondary,
       textColor3: colors.textSecondary,
-      textColorDisabled: `${colors.textSecondary}80`,
+      textColorDisabled: disabledText,
       placeholderColor: colors.textSecondary,
-      placeholderColorDisabled: `${colors.textSecondary}80`,
+      placeholderColorDisabled: disabledText,
       iconColor: colors.textSecondary,
       iconColorHover: colors.text,
       iconColorPressed: colors.text,
-      iconColorDisabled: `${colors.textSecondary}80`,
+      iconColorDisabled: disabledText,
       borderColor: colors.border,
       dividerColor: colors.border,
       closeIconColor: colors.textSecondary,
