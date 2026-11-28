@@ -17,7 +17,6 @@ import {
   NText,
   TiButton,
   TiInput,
-  TiTag,
   useTiTheme,
 } from '@teal-ink/vue'
 import { type Component, computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
@@ -181,20 +180,10 @@ onBeforeUnmount(() => locationEvents.abort())
 
 <template>
   <NFlex id="components" vertical class="workshop" role="region" aria-labelledby="workshop-title">
-    <NFlex vertical class="workshop__intro">
-      <NFlex align="center">
-        <span class="workshop__index" aria-hidden="true">02</span>
-        <NText depth="3" class="overline">{{ t('workshop.overline') }}</NText>
-      </NFlex>
-      <NH2 id="workshop-title" class="section-title">{{ t('workshop.heading') }}</NH2>
-    </NFlex>
+    <NH2 id="workshop-title" class="section-title">{{ t('showcase.components') }}</NH2>
 
     <div class="workbench">
       <aside class="directory" :aria-label="t('workshop.directoryAndFilters')">
-        <header class="directory__header">
-          <NText depth="3" class="directory__title">{{ t('workshop.directory') }}</NText>
-          <TiTag size="small" :round="false">{{ t('workshop.filteredCount', { filtered: filteredEntries.length, total: examples.length }) }}</TiTag>
-        </header>
         <NFlex vertical class="directory__filters">
           <TiInput id="component-search" v-model="searchText" :label="t('workshop.searchComponents')" :placeholder="t('workshop.nameOrCategory')" clearable />
           <div class="directory__selects">
@@ -221,10 +210,7 @@ onBeforeUnmount(() => locationEvents.abort())
 
       <section class="stage" :aria-label="t('workshop.previewAndApi')">
         <header class="stage__header">
-          <NFlex vertical class="stage__heading">
-            <NText depth="3" class="stage__group">{{ t(`workshop.groups.${selectedEntry.group}`) }}</NText>
-            <NH3 class="stage__title">{{ selectedEntry.name }}</NH3>
-          </NFlex>
+          <NH3 class="stage__title">{{ selectedEntry.name }}</NH3>
           <TiButton size="small" @click="resetKey++; resetView()">{{ t('workshop.resetExample') }}</TiButton>
         </header>
         <NTabs v-model:value="activeTab" type="line" class="stage__tabs">
@@ -253,10 +239,7 @@ onBeforeUnmount(() => locationEvents.abort())
           </NTabPane>
           <NTabPane name="import" :tab="t('workshop.importTab')" :tab-props="tabProps('import')">
             <NFlex vertical class="stage__import">
-              <NFlex justify="space-between" align="center" :wrap="true">
-                <NText strong>{{ t('workshop.onDemandImport') }}</NText>
-                <TiButton size="small" @click="copyImport">{{ t('workshop.copyCode') }}</TiButton>
-              </NFlex>
+              <TiButton class="stage__copy" size="small" @click="copyImport">{{ t('workshop.copyCode') }}</TiButton>
               <NCode :code="importCode" language="javascript" class="stage__code" />
               <NText depth="3">{{ t('workshop.providerExplanation') }}</NText>
               <NText type="primary" aria-live="polite">{{ copyMessage ? t(`workshop.${copyMessage}`) : '' }}</NText>
@@ -276,16 +259,6 @@ onBeforeUnmount(() => locationEvents.abort())
   color: var(--ti-color-text);
   font-family: var(--ti-font-sans);
   overflow-wrap: anywhere;
-}
-.workshop__index {
-  color: var(--ti-color-text-secondary);
-  font: var(--ti-font-size-caption) var(--ti-font-mono);
-  padding-right: var(--ti-space-3);
-  border-right: 1px solid var(--ti-color-border);
-}
-.workshop__intro :deep(.overline) {
-  font-size: var(--ti-font-size-caption);
-  letter-spacing: 0.04em;
 }
 .section-title {
   margin: 0;
@@ -307,21 +280,6 @@ onBeforeUnmount(() => locationEvents.abort())
   padding: var(--ti-space-5);
   border-right: 1px solid var(--ti-color-border);
   background: var(--ti-color-surface);
-}
-.directory__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ti-space-3);
-  padding-bottom: var(--ti-space-4);
-  border-bottom: 1px solid var(--ti-color-border);
-}
-.directory__title {
-  font-size: var(--ti-font-size-label);
-  font-weight: 500;
-}
-.directory__filters {
-  padding-top: var(--ti-space-4);
 }
 .directory__selects {
   display: grid;
@@ -366,16 +324,13 @@ onBeforeUnmount(() => locationEvents.abort())
   padding-bottom: var(--ti-space-4);
   border-bottom: 1px solid var(--ti-color-border);
 }
-.stage__heading { min-width: 0; }
-.stage__group {
-  font-size: var(--ti-font-size-caption);
-  color: var(--ti-color-text-secondary);
-}
 .stage__title {
+  min-width: 0;
   overflow-wrap: anywhere;
   margin: 0;
   font: 500 var(--ti-font-size-heading) / var(--ti-line-height-heading) var(--ti-font-mono);
 }
+.stage__copy { align-self: flex-end; }
 .stage__tabs { min-width: 0; margin-top: var(--ti-space-3); }
 .stage__tabs :deep(.n-tabs-nav) { min-width: 0; }
 .stage__tabs :deep(.n-tab-pane) { min-width: 0; }
@@ -441,7 +396,7 @@ onBeforeUnmount(() => locationEvents.abort())
   .workbench { border-radius: var(--ti-radius-control); corner-shape: var(--ti-corner-shape-control); }
   .directory__selects { grid-template-columns: minmax(0, 1fr); }
   .stage__header { align-items: flex-start; flex-direction: column; gap: var(--ti-space-3); }
-  .stage__heading { width: 100%; }
+  .stage__title { width: 100%; }
   .stage__header :deep(.n-button) { flex: none; }
   .stage__preview { min-height: 320px; padding: var(--ti-space-3); }
   .preview-frame { min-height: 480px; }
