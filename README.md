@@ -8,8 +8,6 @@
 
 </div>
 
-Teal Ink (青墨) is a design theme built on warm neutrals, with teal for primary actions and sage green for support. It ships as Vue components and Web Components sharing one token set.
-
 ## Install
 
 ```sh
