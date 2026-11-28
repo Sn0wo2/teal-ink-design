@@ -1,6 +1,6 @@
 {
   "name": "@teal-ink/elements",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "Use Teal Ink Web Components in plain HTML and any JavaScript framework",
   "keywords": [
@@ -53,7 +53,7 @@
     "prepack": "bun run build"
   },
   "dependencies": {
-    "@teal-ink/vue": "0.1.1",
+    "@teal-ink/vue": "0.1.2",
     "@vueuse/core": "^15.0.0",
     "vue": "3.5.45"
   },
