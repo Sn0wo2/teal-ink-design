@@ -8,7 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@teal-ink/vue/style.css": fileURLToPath(new URL("../../packages/teal-ink/src/style.css", import.meta.url)),
-      "@teal-ink/vue": fileURLToPath(new URL("../../packages/teal-ink/src/index.ts", import.meta.url)),
     },
     conditions: ["teal-ink-source", "module", "browser", "development|production"],
     dedupe: ["vue"],

@@ -6,9 +6,10 @@ import javascript from "highlight.js/lib/languages/javascript"
 import scss from "highlight.js/lib/languages/scss"
 import typescript from "highlight.js/lib/languages/typescript"
 import xml from "highlight.js/lib/languages/xml"
-import { defineAsyncComponent, ref, watchEffect } from "vue"
+import { computed, defineAsyncComponent, ref, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import Showcase from "./Showcase.vue"
+import { storeLocale } from "./utils/storage"
 
 hljs.registerLanguage("javascript", javascript)
 hljs.registerLanguage("typescript", typescript)
@@ -21,13 +22,15 @@ const params = new URLSearchParams(location.search)
 const initialMode = params.get("theme")
 const mode = ref<TiColorMode>(initialMode === "light" || initialMode === "dark" ? initialMode : "system")
 const preview = params.get("preview")
+const providerLocale = computed(() => (locale.value === "en" ? enUS : zhCN))
+const providerDateLocale = computed(() => (locale.value === "en" ? dateEnUS : dateZhCN))
 const StandaloneExample = defineAsyncComponent(() => import("./components/StandaloneExample.vue"))
 
 watchEffect(() => {
   document.documentElement.lang = locale.value
   document.title = t("app.title")
   document.getElementsByName("description")[0]?.setAttribute("content", t("app.description"))
-  try { localStorage.setItem("teal-ink-locale", locale.value) } catch {}
+  storeLocale(locale.value)
   const url = new URL(location.href)
   url.searchParams.set("lang", locale.value)
   history.replaceState(history.state, "", `${url.pathname}${url.search}${url.hash}`)
@@ -35,7 +38,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <TiProvider v-model:mode="mode" :locale="locale === 'en' ? enUS : zhCN" :date-locale="locale === 'en' ? dateEnUS : dateZhCN" :hljs="hljs" global>
+  <TiProvider v-model:mode="mode" :locale="providerLocale" :date-locale="providerDateLocale" :hljs="hljs" global>
     <StandaloneExample v-if="preview" :name="preview" />
     <Showcase v-else />
   </TiProvider>
