@@ -31,9 +31,9 @@
     "@biomejs/biome": "^2.6.9",
     "@types/node": "^26.6.11",
     "@typescript/typescript6": "^6.0.2",
-    "sass-embedded": "1.107.1",
+    "sass-embedded": "1.108.2",
     "typescript": "7.0.2",
-    "vite": "8.3.6",
+    "vite": "8.4.0",
     "vue-tsc": "3.3.14"
   },
   "patchedDependencies": {
