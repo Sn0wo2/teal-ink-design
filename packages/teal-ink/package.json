@@ -1,6 +1,6 @@
 {
   "name": "@teal-ink/vue",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Style your Vue 3 app with the Teal Ink theme and components, built on Naive UI",
   "keywords": [
