@@ -32,7 +32,7 @@ import {
   useHost,
   type VueElement,
 } from "vue"
-import { contexts, options, refreshScopes, registerElements, renderControl, ThemeConnection } from "./utils"
+import { contexts, options, registerElements, renderControl, ThemeConnection, withScopes } from "./utils"
 
 const formState = new WeakMap<HTMLElement, { internals: ElementInternals; disabled: Ref<boolean> }>()
 
@@ -54,7 +54,7 @@ export const TiProviderElement = defineCustomElement(
       const dateLocale = computed(() => props.dateLocale ?? (locale.value.name === "en-US" ? dateEnUS : dateZhCN))
       contexts.set(host, {
         mode: () => props.mode,
-        theme: () => theme.theme.value,
+        providerMode: () => theme.theme.value,
         locale: () => locale.value,
         dateLocale: () => dateLocale.value,
         setMode: (value, trigger) => theme.setMode(value, trigger),
@@ -97,7 +97,7 @@ export const TiProviderElement = defineCustomElement(
   { styles: [...options.styles, ":host { display: block; }"] },
 )
 
-export class TiButtonElement extends defineCustomElement(
+const buttonBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -152,7 +152,9 @@ export class TiButtonElement extends defineCustomElement(
     },
   }),
   { shadowRootOptions: { delegatesFocus: true }, styles: [...options.styles, ":host([block]) { display: block; }"] },
-) {
+)
+
+export class TiButtonElement extends withScopes(buttonBase) {
   static formAssociated = true
 
   constructor() {
@@ -174,11 +176,6 @@ export class TiButtonElement extends defineCustomElement(
     return formState.get(this)?.internals.form ?? null
   }
 
-  override connectedCallback() {
-    super.connectedCallback()
-    refreshScopes.get(this)?.()
-  }
-
   formDisabledCallback(disabled: boolean) {
     const state = formState.get(this)
     if (state) state.disabled.value = disabled
@@ -192,7 +189,7 @@ export class TiButtonElement extends defineCustomElement(
   }
 }
 
-export class TiCardElement extends defineCustomElement(
+const cardBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -203,14 +200,11 @@ export class TiCardElement extends defineCustomElement(
     setup: (props, { attrs }) => renderControl(TiCard, () => props, attrs, ["header", "header-extra", "footer"]),
   }),
   { styles: [...options.styles, ":host { display: block; }"] },
-) {
-  override connectedCallback() {
-    super.connectedCallback()
-    refreshScopes.get(this)?.()
-  }
-}
+)
 
-export class TiInputElement extends defineCustomElement(
+export class TiCardElement extends withScopes(cardBase) {}
+
+const inputBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -261,7 +255,9 @@ export class TiInputElement extends defineCustomElement(
     },
   }),
   { shadowRootOptions: { delegatesFocus: true }, styles: [...options.styles, ":host { display: block; }"] },
-) {
+)
+
+export class TiInputElement extends withScopes(inputBase) {
   static formAssociated = true
   #defaultValue: string | undefined
 
@@ -312,7 +308,6 @@ export class TiInputElement extends defineCustomElement(
   override connectedCallback() {
     this.#defaultValue ??= this.getAttribute("value") ?? ""
     super.connectedCallback()
-    refreshScopes.get(this)?.()
   }
 
   get form() {
@@ -357,7 +352,7 @@ export class TiInputElement extends defineCustomElement(
   }
 }
 
-export class TiTagElement extends defineCustomElement(
+const tagBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -385,14 +380,11 @@ export class TiTagElement extends defineCustomElement(
     },
   }),
   options,
-) {
-  override connectedCallback() {
-    super.connectedCallback()
-    refreshScopes.get(this)?.()
-  }
-}
+)
 
-export class TiLogoElement extends defineCustomElement(
+export class TiTagElement extends withScopes(tagBase) {}
+
+const logoBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -402,14 +394,11 @@ export class TiLogoElement extends defineCustomElement(
     setup: (props, { attrs }) => renderControl(TiLogo, () => props, attrs),
   }),
   options,
-) {
-  override connectedCallback() {
-    super.connectedCallback()
-    refreshScopes.get(this)?.()
-  }
-}
+)
 
-export class TiThemeSwitchElement extends defineCustomElement(
+export class TiLogoElement extends withScopes(logoBase) {}
+
+const themeSwitchBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -430,12 +419,9 @@ export class TiThemeSwitchElement extends defineCustomElement(
     setup: (props, { attrs }) => renderControl(TiThemeSwitch, () => props, attrs, [], true),
   }),
   options,
-) {
-  override connectedCallback() {
-    super.connectedCallback()
-    refreshScopes.get(this)?.()
-  }
-}
+)
+
+export class TiThemeSwitchElement extends withScopes(themeSwitchBase) {}
 
 export function defineTealInkElements() {
   registerElements({

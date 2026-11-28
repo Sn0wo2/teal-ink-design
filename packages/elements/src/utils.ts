@@ -24,7 +24,7 @@ import {
 
 interface ElementContext {
   mode: () => TiColorMode
-  theme: () => TiColorMode
+  providerMode: () => TiColorMode
   locale: () => NLocale
   dateLocale: () => NDateLocale
   setMode: TiThemeContext["setMode"]
@@ -32,6 +32,34 @@ interface ElementContext {
 
 export const contexts = new WeakMap<HTMLElement, ElementContext>()
 export const refreshScopes = new WeakMap<HTMLElement, () => void>()
+
+export function withScopes<T extends CustomElementConstructor>(element: T) {
+  const connected = (element.prototype as HTMLElement & { connectedCallback?: () => void }).connectedCallback
+  return class extends element {
+    connectedCallback() {
+      connected?.call(this)
+      refreshScopes.get(this)?.()
+    }
+  }
+}
+
+function composedParent(node: Node): Node | null {
+  if (node instanceof Element && node.assignedSlot) return node.assignedSlot
+  return node.parentNode ?? (node instanceof ShadowRoot ? node.host : null)
+}
+
+function findContext(host: HTMLElement) {
+  for (let node = composedParent(host); node; node = composedParent(node)) {
+    if (node instanceof HTMLElement) {
+      const context = contexts.get(node)
+      if (context) return context
+    }
+  }
+  return undefined
+}
+
+const sameNames = (left: Set<string>, right: Set<string>) =>
+  left.size === right.size && [...left].every((name) => right.has(name))
 
 export const ThemeConnection = defineComponent({
   props: {
@@ -62,7 +90,7 @@ export function renderControl(
   const mode = ref<TiColorMode>("light")
   const fallback: ElementContext = {
     mode: () => mode.value,
-    theme: () => mode.value,
+    providerMode: () => mode.value,
     locale: () => zhCN,
     dateLocale: () => dateZhCN,
     setMode: (value) => {
@@ -75,21 +103,7 @@ export function renderControl(
   }
   const context = shallowRef(fallback)
   const refresh = () => {
-    let ancestor: Node | null = host
-    while (ancestor) {
-      ancestor =
-        (ancestor instanceof Element && ancestor.assignedSlot) ||
-        ancestor.parentNode ||
-        (ancestor instanceof ShadowRoot ? ancestor.host : null)
-      if (ancestor instanceof HTMLElement) {
-        const scope = contexts.get(ancestor)
-        if (scope) {
-          context.value = scope
-          return
-        }
-      }
-    }
-    context.value = fallback
+    context.value = findContext(host) ?? fallback
   }
   refreshScopes.set(host, refresh)
   refresh()
@@ -98,9 +112,7 @@ export function renderControl(
   if (names.length) {
     const updateSlots = () => {
       const next = new Set(Array.from(host.children, (child) => child.getAttribute("slot") ?? ""))
-      if (next.size !== assigned.value.size || Array.from(next).some((name) => !assigned.value.has(name))) {
-        assigned.value = next
-      }
+      if (!sameNames(next, assigned.value)) assigned.value = next
     }
     updateSlots()
     useMutationObserver(host, updateSlots, {
@@ -123,7 +135,7 @@ export function renderControl(
     return h(
       TiProvider,
       {
-        mode: context.value.theme(),
+        mode: context.value.providerMode(),
         locale: context.value.locale(),
         dateLocale: context.value.dateLocale(),
         styleMountTarget: host.shadowRoot,
@@ -151,8 +163,9 @@ export function registerElements(elements: Record<string, CustomElementConstruct
   if (typeof customElements === "undefined") return
   for (const [name, element] of Object.entries(elements)) {
     const registered = customElements.get(name)
-    if (registered && registered !== element) throw new Error(`Custom element ${name} is already registered`)
-    if (!registered) customElements.define(name, element)
+    if (registered === element) continue
+    if (registered) throw new Error(`Custom element ${name} is already registered`)
+    customElements.define(name, element)
   }
   if (!document.querySelector("style[data-ti-elements]")) {
     const style = document.createElement("style")

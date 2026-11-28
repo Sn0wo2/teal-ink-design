@@ -9,7 +9,7 @@ import {
   type Slots,
 } from "vue"
 import { defineTealInkElements as defineBaseElements } from "./index"
-import { refreshScopes, registerElements, renderControl } from "./utils"
+import { registerElements, renderControl, withScopes } from "./utils"
 
 export * from "@teal-ink/vue"
 export { defineComponent, h, nextTick, reactive, ref, shallowRef } from "vue"
@@ -17,7 +17,11 @@ export * from "./index"
 
 const componentName = /^(N[A-Z]|NxButton|Ti[A-Z])/
 
-export class TiComponentElement extends defineCustomElement(
+const isComponent = (value: unknown): value is Component =>
+  typeof value === "function" ||
+  (typeof value === "object" && value !== null && ("setup" in value || "render" in value))
+
+const componentBase = defineCustomElement(
   defineComponent({
     inheritAttrs: false,
     props: {
@@ -47,22 +51,14 @@ export class TiComponentElement extends defineCustomElement(
   {
     shadowRoot: false,
     configureApp(app) {
-      for (const [name, component] of Object.entries(library).filter(
-        ([name, component]) =>
-          componentName.test(name) &&
-          component &&
-          (typeof component === "function" ||
-            (typeof component === "object" && ("setup" in component || "render" in component))),
-      ))
-        app.component(name, component as Component)
+      for (const [name, component] of Object.entries(library)) {
+        if (componentName.test(name) && isComponent(component)) app.component(name, component)
+      }
     },
   },
-) {
-  override connectedCallback() {
-    super.connectedCallback()
-    refreshScopes.get(this)?.()
-  }
-}
+)
+
+export class TiComponentElement extends withScopes(componentBase) {}
 
 export function defineTealInkElements() {
   defineBaseElements()
